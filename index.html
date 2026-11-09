@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MetaFrame Labs — Building Intelligent Products at Scale</title>
+<meta name="description" content="MetaFrame Labs: high-performance, privacy-prioritizing AI systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="icons/MetaBox.png">
+<link rel="apple-touch-icon" href="icons/MetaBox.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="boot"><pre id="bootlog"></pre></div>
+<canvas id="field"></canvas>
+<canvas id="gl"></canvas>
+<div id="prog"></div><div id="trail"></div>
+<div id="cursor"></div>
+
+<nav>
+  <a class="logo" href="#top"><span>M</span>etaFrame<i>/labs</i></a>
+  <div class="links"><a href="#lab">Lab</a><a href="#console">Console</a><a href="#products">Products</a><a href="#principles">Principles</a><a href="#contact">Contact</a></div>
+</nav>
+
+<header id="top">
+  <p class="tag">// AI-native · privacy-first · shipped</p>
+  <h1>We don't build<br><em>websites.</em><br>We build <span class="glitch" data-text="minds.">minds.</span></h1>
+  <p class="sub">MetaFrame Labs turns data, intelligence and ideas into real-world products — from an AI app factory in your pocket to tools that think alongside you.</p>
+  <div class="pills"><span>AI Products</span><span>Platforms</span><span>Users</span><span>Global</span></div>
+  <div class="scroll">scroll to enter the lab ↓</div>
+</header>
+
+<section id="lab">
+  <h2><small>01</small> The Lab is alive</h2>
+  <div class="grid3">
+    <div class="stat"><b data-n="7">0</b><span>products live on Google Play</span></div>
+    <div class="stat"><b data-n="100">0</b><span>% privacy-prioritizing by design</span></div>
+    <div class="stat"><b data-n="1">0</b><span>mission: ideas → real products</span></div>
+  </div>
+  <p class="lead">Move your cursor. The field around you is a tiny model of how we work: scattered data, pulled into intelligence, resolved into a single form.</p>
+</section>
+
+<section id="console">
+  <h2><small>02</small> Idea → App, live</h2>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>metabox://prompt</span></div>
+    <div class="body">
+      <div class="chips" id="chips"></div>
+      <div class="out" id="out"></div>
+      <form id="form"><span>&gt;</span><input id="inp" autocomplete="off" placeholder="describe an app… or click a chip" maxlength="80"><button>build</button></form>
+    </div>
+  </div>
+  <p class="note">A simulation of the Meta Box workflow: describe it, watch it get assembled.</p>
+</section>
+
+<section id="products">
+  <h2><small>03</small> The Cartridges</h2>
+  <p class="lead">Every product is a cartridge. Hover to inspect, click to flip.</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="principles">
+  <h2><small>04</small> Operating principles</h2>
+  <ol class="rules">
+    <li><b>Intelligence at the edge.</b> Your data belongs on your device first.</li>
+    <li><b>Ship small, ship real.</b> A product in hands beats a deck on a screen.</li>
+    <li><b>Built for every kind of mind.</b> Focus, study and neurodivergence aren't edge cases — they're the brief.</li>
+    <li><b>Scale is a feature.</b> Fast, light, and global from day one.</li>
+  </ol>
+</section>
+
+<section id="contact">
+  <h2><small>05</small> Open a channel</h2>
+  <a class="big" id="mail" href="mailto:metaframe.labs@proton.me">metaframe.labs@proton.me</a>
+  <p class="note">Replace this address with your real one. Also find us on Google Play: “MetaFrame Labs”.</p>
+</section>
+
+<footer>© <span id="y"></span> MetaFrame Labs — Building intelligent products at scale. <button id="konami" title="try the Konami code">◆</button></footer>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="main.js"></script>
+<script src="fx.js"></script>
+</body>
+</html>
