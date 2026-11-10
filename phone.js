@@ -113,9 +113,16 @@ function drawBack(i){
   c.save();rrect(c,0,0,W,H,95);c.clip();
   const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,mix(i.color,0,.1));g.addColorStop(1,mix(i.color,0,.7));c.fillStyle=g;c.fillRect(0,0,W,H);
   const sh=c.createLinearGradient(0,0,W,H);sh.addColorStop(.3,'rgba(255,255,255,0)');sh.addColorStop(.5,'rgba(255,255,255,.18)');sh.addColorStop(.7,'rgba(255,255,255,0)');c.fillStyle=sh;c.fillRect(0,0,W,H);
-  const dk=lum(i.color)<.55,fc=dk?'rgba(255,255,255,.92)':'rgba(0,0,0,.8)';
-  T(c,'M',W/2,H/2+60,260,fc,'700','center');T(c,'METAFRAME LABS',W/2,H-110,26,fc,'600','center','"JetBrains Mono",monospace');
-  c.restore();
+  // frosted-glass grain
+  const im=c.getImageData(0,0,W,H),d=im.data;for(let k=0;k<d.length;k+=4){const n=(Math.random()-.5)*14;d[k]+=n;d[k+1]+=n;d[k+2]+=n}c.putImageData(im,0,0);
+  // soft top-left sheen + edge vignette
+  const rg2=c.createRadialGradient(W*.25,H*.18,10,W*.25,H*.18,W*.9);rg2.addColorStop(0,'rgba(255,255,255,.22)');rg2.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=rg2;c.fillRect(0,0,W,H);
+  const vg=c.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.65);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');c.fillStyle=vg;c.fillRect(0,0,W,H);
+  const dk=lum(i.color)<.55,fc=dk?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)';
+  // subtle etched logo, like a real phone
+  T(c,'M',W/2,H/2+170,90,fc,'700','center');
+  T(c,'METAFRAME LABS',W/2,H-130,18,fc,'600','center','"JetBrains Mono",monospace');
+  c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;rrect(c,2,2,W-4,H-4,93);c.stroke();  c.restore();
   const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;return t;
 }
 
@@ -151,13 +158,21 @@ function build(){
   glare.position.z=.19;phone.add(glare);
 
   // back plate + camera bump
-  backMat=new THREE.MeshStandardMaterial({metalness:.3,roughness:.35,transparent:true,alphaTest:.02});
+  backMat=new THREE.MeshPhysicalMaterial({metalness:.15,roughness:.45,clearcoat:.8,clearcoatRoughness:.25,transparent:true,alphaTest:.02});
   const back=new THREE.Mesh(new THREE.PlaneGeometry(2.14,2.14*1058/512),backMat);back.rotation.y=Math.PI;back.position.z=-.175;phone.add(back);
-  bump=new THREE.Group();bump.position.set(.55,1.55,-.2);bump.rotation.y=Math.PI;phone.add(bump);
-  const bb=new THREE.Mesh(new THREE.BoxGeometry(.8,.8,.07),new THREE.MeshStandardMaterial({color:0x101014,metalness:.7,roughness:.35}));bump.add(bb);
-  [[-.17,.17],[.17,.17],[0,-.17]].forEach(([x,y])=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,.06,24),new THREE.MeshStandardMaterial({color:0x050507,metalness:.9,roughness:.12}));
-    l.rotation.x=Math.PI/2;l.position.set(x,y,.05);bump.add(l)});
-
+  bump=new THREE.Group();bump.position.set(.5,1.5,-.2);bump.rotation.y=Math.PI;phone.add(bump);
+  const isl=new THREE.ExtrudeGeometry(rr(1.0,1.0,.28),{depth:.05,bevelEnabled:true,bevelThickness:.03,bevelSize:.03,bevelSegments:6,curveSegments:16});isl.translate(0,0,-.02);
+  bump.add(new THREE.Mesh(isl,new THREE.MeshPhysicalMaterial({color:0x0c0c10,metalness:.5,roughness:.25,clearcoat:1,clearcoatRoughness:.1})));
+  const ringM=new THREE.MeshStandardMaterial({color:0x8a8a94,metalness:1,roughness:.2});
+  const glassM=new THREE.MeshPhysicalMaterial({color:0x020208,metalness:.9,roughness:.05,clearcoat:1,clearcoatRoughness:0});
+  const coreM=new THREE.MeshStandardMaterial({color:0x1a2a55,metalness:1,roughness:.1,emissive:0x0a1030,emissiveIntensity:.6});
+  [[-.22,.22],[.22,.22],[-.22,-.22]].forEach(([x,y])=>{
+    const g2=new THREE.Group();g2.position.set(x,y,.09);g2.rotation.x=Math.PI/2;bump.add(g2);
+    g2.add(new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.08,32),ringM));
+    const gl=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,.1,32),glassM);g2.add(gl);
+    const co=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.11,24),coreM);g2.add(co)});
+  const fl=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.04,24),new THREE.MeshStandardMaterial({color:0xfff2c8,emissive:0xffe9a8,emissiveIntensity:.5,roughness:.4}));
+  fl.rotation.x=Math.PI/2;fl.position.set(.24,-.2,.06);bump.add(fl);
   const n=420,p=new Float32Array(n*3);
   for(let k=0;k<n;k++){const a=Math.random()*6.283,r=2.6+Math.random()*1.4;p[k*3]=Math.cos(a)*r;p[k*3+1]=(Math.random()-.5)*5.5;p[k*3+2]=Math.sin(a)*r}
   const rg=new THREE.BufferGeometry();rg.setAttribute('position',new THREE.BufferAttribute(p,3));
