@@ -116,7 +116,7 @@ function drawBack(i){
   // frosted-glass grain
   const im=c.getImageData(0,0,W,H),d=im.data;for(let k=0;k<d.length;k+=4){const n=(Math.random()-.5)*14;d[k]+=n;d[k+1]+=n;d[k+2]+=n}c.putImageData(im,0,0);
   // soft top-left sheen + edge vignette
-  const rg2=c.createRadialGradient(W*.25,H*.18,10,W*.25,H*.18,W*.9);rg2.addColorStop(0,'rgba(255,255,255,.08)');rg2.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=rg2;c.fillRect(0,0,W,H);
+  const rg2=c.createRadialGradient(W*.25,H*.18,10,W*.25,H*.18,W*.9);rg2.addColorStop(0,'rgba(255,255,255,.03)');rg2.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=rg2;c.fillRect(0,0,W,H);
   const vg=c.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.65);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');c.fillStyle=vg;c.fillRect(0,0,W,H);
   const dk=true,fc=dk?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)';
   // subtle etched logo, like a real phone
@@ -166,7 +166,7 @@ function build(){
   glare.position.z=.19;phone.add(glare);
 
   // back plate + camera bump
-  backMat=new THREE.MeshPhysicalMaterial({color:0x8c8c8c,metalness:.03,roughness:.75,clearcoat:.15,clearcoatRoughness:.6,transparent:true,alphaTest:.02});
+  backMat=new THREE.MeshPhysicalMaterial({color:0x4a4a4a,metalness:0,roughness:.95,clearcoat:0,specularIntensity:.2,transparent:true,alphaTest:.02});
   const back=new THREE.Mesh(new THREE.PlaneGeometry(2.14,2.14*1058/512),backMat);back.rotation.y=Math.PI;back.position.z=-.175;phone.add(back);
   bump=new THREE.Group();bump.position.set(.5,1.5,-.2);bump.rotation.y=Math.PI;phone.add(bump);
   const isl=new THREE.ExtrudeGeometry(rr(1.0,1.0,.28),{depth:.05,bevelEnabled:true,bevelThickness:.03,bevelSize:.03,bevelSegments:6,curveSegments:16});isl.translate(0,0,-.02);
