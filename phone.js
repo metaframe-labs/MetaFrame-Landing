@@ -120,8 +120,15 @@ function drawBack(i){
   const vg=c.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.65);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');c.fillStyle=vg;c.fillRect(0,0,W,H);
   const dk=lum(i.color)<.55,fc=dk?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)';
   // subtle etched logo, like a real phone
-  T(c,'M',W/2,H/2+170,90,fc,'700','center');
-  T(c,'METAFRAME LABS',W/2,H-130,18,fc,'600','center','"JetBrains Mono",monospace');
+  // brand wordmark
+  c.save();c.textAlign='left';c.textBaseline='alphabetic';c.shadowColor=dk?'rgba(0,0,0,.35)':'rgba(255,255,255,.4)';c.shadowBlur=6;c.shadowOffsetY=2;
+  c.font='700 62px "Space Grotesk","Inter",system-ui,sans-serif';const w1=c.measureText('MetaFrame').width;
+  c.font='300 62px "Space Grotesk","Inter",system-ui,sans-serif';const w2=c.measureText(' Labs').width;
+  const x0=(W-w1-w2)/2,yy=H/2+150,wf=dk?'rgba(255,255,255,.92)':'rgba(0,0,0,.82)';
+  c.font='700 62px "Space Grotesk","Inter",system-ui,sans-serif';c.fillStyle=wf;c.fillText('MetaFrame',x0,yy);
+  c.font='300 62px "Space Grotesk","Inter",system-ui,sans-serif';c.fillStyle=dk?'rgba(255,255,255,.65)':'rgba(0,0,0,.55)';c.fillText(' Labs',x0+w1,yy);
+  c.restore();
+  c.fillStyle=wf;c.globalAlpha=.5;c.fillRect(W/2-24,yy+26,48,3);c.globalAlpha=1;
   c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;rrect(c,2,2,W-4,H-4,93);c.stroke();  c.restore();
   const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;return t;
 }
