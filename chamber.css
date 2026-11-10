@@ -1,0 +1,9 @@
+#chamber{padding:120px 5vw}
+#chamber .room{position:relative;height:min(85vh,780px);min-height:520px;margin-top:40px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#040407}
+#chamber canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#chamber .room::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.7) 100%),repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 3px)}
+#chamber .cap{position:absolute;left:clamp(18px,3vw,36px);bottom:clamp(18px,3vw,36px);z-index:3;max-width:440px;pointer-events:none}
+#chamber .cap b{display:block;font-size:clamp(1.6rem,4vw,3rem);letter-spacing:-.03em;line-height:1}
+#chamber .cap span{display:block;margin-top:10px;font:12px 'JetBrains Mono',monospace;color:var(--dim)}
+#chamber .tl{position:absolute;right:clamp(18px,3vw,36px);top:clamp(18px,3vw,36px);z-index:3;font:12px 'JetBrains Mono',monospace;color:var(--em);pointer-events:none}
+#chamber .nogl::before{content:"WebGL unavailable";position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font:13px 'JetBrains Mono',monospace}

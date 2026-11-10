@@ -1,69 +1,113 @@
-// ---------- THE CHAMBER as the site's world: cage, cables, pillars and glossy floor live INSIDE the global scene ----------
-// The morphing particle core (M / sphere / cube / ...) now hangs inside the cage, on every section.
+// ---------- THE CHAMBER: suspended shard-core in a cable cage, fog, reflective floor (Three.js) ----------
 (function(){
-const mf=window.__mf;if(!mf||!window.THREE)return;
+const box=document.querySelector('#chamber .room');
+if(!box||!window.THREE)return;
 const T=THREE,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const scene=mf.scene;
-scene.fog=new T.FogExp2(0x07070a,.045);
+let renderer;
+try{renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'})}catch(e){box.classList.add('nogl');return}
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
+renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+box.prepend(renderer.domElement);
 
-// lights (the particle shader ignores them; they only shape the architecture)
-scene.add(new T.AmbientLight(0x2a2a38,1.1));
-const coreL=new T.PointLight(0xff7ad9,30,16,2);scene.add(coreL);
-const rim=new T.SpotLight(0x8fb4ff,70,40,.7,.8,1.4);rim.position.set(-8,8,5);scene.add(rim,rim.target);
-const gL=new T.PointLight(0x27e39a,10,8,2);scene.add(gL);
+const scene=new T.Scene();scene.background=new T.Color(0x040407);scene.fog=new T.FogExp2(0x050509,.055);
+const cam=new T.PerspectiveCamera(48,1,.1,80);cam.position.set(0,1.2,11);
 
-const root=new T.Group();mf.group.add(root);          // follows the core when it slides left/right per section
-root.scale.setScalar(.62);root.position.y=-1.5;
-const metal=new T.MeshStandardMaterial({color:0x6d707c,metalness:.95,roughness:.38});
-const dark=new T.MeshStandardMaterial({color:0x101016,metalness:.4,roughness:.85});
-const cm=new T.MeshStandardMaterial({color:0x1d1e26,metalness:.7,roughness:.5});
+// lights
+scene.add(new T.AmbientLight(0x20202c,.8));
+const core=new T.PointLight(0xff7ad9,40,18,2);core.position.set(0,2.2,0);scene.add(core);
+const rim=new T.SpotLight(0x8fb4ff,60,30,.6,.8,1.5);rim.position.set(-8,9,4);rim.target.position.set(0,2,0);scene.add(rim,rim.target);
+const gl=new T.PointLight(0x27e39a,14,9,2);gl.position.set(0,-1.2,3);scene.add(gl);
 
-// cage
-const cage=new T.Group();root.add(cage);
+const metal=new T.MeshStandardMaterial({color:0x8a8d99,metalness:.95,roughness:.35});
+const dark=new T.MeshStandardMaterial({color:0x14141a,metalness:.4,roughness:.8});
+
+// cage: rings, bars, base
+const cage=new T.Group();scene.add(cage);
 [[4.2,6.2],[3.4,5.4],[3.0,4.4]].forEach(([r,y],i)=>{
-  const m=new T.Mesh(new T.TorusGeometry(r,.07+i*.03,12,96),metal);m.rotation.x=Math.PI/2;m.position.y=y;m.userData.spin=(i%2?1:-1)*(.03+i*.02);cage.add(m)});
-const cap=new T.Mesh(new T.CylinderGeometry(3.6,4.4,.5,48,1,true),metal);cap.position.y=6.7;cage.add(cap);
-for(let i=0;i<18;i++){const a=i/18*6.283;
-  const b=new T.Mesh(new T.CylinderGeometry(.03,.03,6.6,6),metal);b.position.set(Math.cos(a)*3.1,2.9,Math.sin(a)*3.1);cage.add(b)}
+  const ring=new T.Mesh(new T.TorusGeometry(r,.07+i*.03,12,96),metal);ring.rotation.x=Math.PI/2;ring.position.y=y;cage.add(ring)});
+const top=new T.Mesh(new T.CylinderGeometry(3.6,4.4,.5,48,1,true),metal);top.position.y=6.7;cage.add(top);
+for(let i=0;i<18;i++){const a=i/18*6.283,r=3.1;
+  const bar=new T.Mesh(new T.CylinderGeometry(.03,.03,6.6,6),metal);bar.position.set(Math.cos(a)*r,2.9,Math.sin(a)*r);cage.add(bar)}
 const base=new T.Mesh(new T.CylinderGeometry(3.4,3.7,.25,64),metal);base.position.y=-.4;cage.add(base);
+const base2=new T.Mesh(new T.TorusGeometry(3.4,.05,8,64),metal);base2.rotation.x=Math.PI/2;base2.position.y=-.25;cage.add(base2);
 
-// cables
-const cables=[];
-for(let i=0;i<28;i++){
+// cables sagging from top ring down to the core / floor
+const cm=new T.MeshStandardMaterial({color:0x22232b,metalness:.7,roughness:.5});
+for(let i=0;i<26;i++){
   const a=Math.random()*6.283,r=3+Math.random()*2.2,b=a+(Math.random()-.5)*1.2;
-  const p=[new T.Vector3(Math.cos(a)*r,6.4,Math.sin(a)*r),new T.Vector3(Math.cos(a)*r*1.1,3+Math.random()*2,Math.sin(a)*r*1.1),
-    new T.Vector3(Math.cos(b)*r*.6,.5+Math.random()*2,Math.sin(b)*r*.6),new T.Vector3(Math.cos(b)*r*1.3,-.45,Math.sin(b)*r*1.3)];
-  const m=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(p),48,.025+Math.random()*.045,6),cm);root.add(m);cables.push(m)}
+  const p=[new T.Vector3(Math.cos(a)*r,6.4,Math.sin(a)*r),
+    new T.Vector3(Math.cos(a)*r*1.1,3+Math.random()*2,Math.sin(a)*r*1.1),
+    new T.Vector3(Math.cos(b)*(r*.6),.5+Math.random()*2,Math.sin(b)*(r*.6)),
+    new T.Vector3(Math.cos(b)*(r*1.3),-.45,Math.sin(b)*(r*1.3))];
+  scene.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(p),48,.025+Math.random()*.04,6),cm))}
 
-// ruined hall: pillars + rubble, spread deep behind and to the sides so every section has depth
-for(let i=0;i<12;i++){const s=1+Math.random()*2.4,m=new T.Mesh(new T.BoxGeometry(s,10+Math.random()*8,s),dark);
-  const side=i%2?1:-1;m.position.set(side*(8+Math.random()*10),3,-5-Math.random()*26);m.rotation.y=Math.random();m.rotation.z=(Math.random()-.5)*.25;root.add(m)}
-for(let i=0;i<90;i++){const m=new T.Mesh(new T.IcosahedronGeometry(.2+Math.random()*.8,0),dark);
-  const a=Math.random()*6.283,r=4.5+Math.random()*16;m.position.set(Math.cos(a)*r,-.4,Math.sin(a)*r-2);m.rotation.set(Math.random()*3,Math.random()*3,0);root.add(m)}
+// environment: pillars + rubble
+for(let i=0;i<7;i++){const s=1+Math.random()*2.2,m=new T.Mesh(new T.BoxGeometry(s,9+Math.random()*6,s),dark);
+  const side=i%2?1:-1;m.position.set(side*(7+Math.random()*7),3,-4-Math.random()*14);m.rotation.y=Math.random();m.rotation.z=(Math.random()-.5)*.25;scene.add(m)}
+for(let i=0;i<60;i++){const m=new T.Mesh(new T.IcosahedronGeometry(.2+Math.random()*.7,0),dark);
+  const a=Math.random()*6.283,r=4.5+Math.random()*10;m.position.set(Math.cos(a)*r,-.4,Math.sin(a)*r-2);m.rotation.set(Math.random()*3,Math.random()*3,0);scene.add(m)}
 
-// glossy floor + emerald patch + pink pool under the core
-const floor=new T.Mesh(new T.PlaneGeometry(90,90),new T.MeshStandardMaterial({color:0x08080c,metalness:.9,roughness:.2}));
-floor.rotation.x=-Math.PI/2;floor.position.y=-.5;root.add(floor);
-function glow(rgb){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);
-  g.addColorStop(0,`rgba(${rgb},.9)`);g.addColorStop(1,`rgba(${rgb},0)`);x.fillStyle=g;x.fillRect(0,0,128,128);
-  return new T.MeshBasicMaterial({map:new T.CanvasTexture(c),transparent:true,blending:T.AdditiveBlending,depthWrite:false})}
-const green=new T.Mesh(new T.PlaneGeometry(5,3),glow('39,227,154'));green.rotation.x=-Math.PI/2;green.position.set(0,-.47,3.4);root.add(green);
-const pink=new T.Mesh(new T.PlaneGeometry(9,9),glow('255,122,217'));pink.rotation.x=-Math.PI/2;pink.position.set(0,-.46,0);pink.material.opacity=.45;root.add(pink);
+// glossy floor + emerald light patch
+const floor=new T.Mesh(new T.PlaneGeometry(60,60),new T.MeshStandardMaterial({color:0x07070b,metalness:.9,roughness:.18}));
+floor.rotation.x=-Math.PI/2;floor.position.y=-.5;scene.add(floor);
+const cv=document.createElement('canvas');cv.width=cv.height=128;const x=cv.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);
+g.addColorStop(0,'rgba(39,227,154,.9)');g.addColorStop(1,'rgba(39,227,154,0)');x.fillStyle=g;x.fillRect(0,0,128,128);
+const patch=new T.Mesh(new T.PlaneGeometry(5,3),new T.MeshBasicMaterial({map:new T.CanvasTexture(cv),transparent:true,blending:T.AdditiveBlending,depthWrite:false}));
+patch.rotation.x=-Math.PI/2;patch.position.set(0,-.48,3.2);scene.add(patch);
 
-// every frame: slow world drift tied to scroll, light follows the core
-const B=document.body;
-function tick(){
-  requestAnimationFrame(tick);
-  const t=performance.now()/1000,H=Math.max(1,B.scrollHeight-innerHeight),p=scrollY/H;
-  if(!reduce){
-    root.rotation.y=(p-.5)*1.4+mf.mouse.x*.12;
-    cage.children.forEach(c=>{if(c.userData.spin)c.rotation.z+=c.userData.spin*.01});
-    cables.forEach((c,i)=>{c.rotation.y=Math.sin(t*.4+i)*.004*(1+mf.pulse*6)});
-  }
-  const w=new T.Vector3();mf.group.getWorldPosition(w);
-  coreL.position.set(w.x,w.y,w.z+.5);coreL.intensity=26+Math.sin(t*2)*5+mf.pulse*50;
-  gL.position.set(w.x,w.y-2.6,w.z+2);
-  rim.target.position.set(w.x,w.y,w.z);
+// shard core: points on a lumpy sphere, glittering
+const N=innerWidth<700?4500:9000,pos=new Float32Array(N*3),seed=new Float32Array(N),col=new Float32Array(N*3);
+const pal=[new T.Color(0xffffff),new T.Color(0xd9b8ff),new T.Color(0xff7ad9),new T.Color(0x9fd0ff)];
+for(let i=0;i<N;i++){
+  const u=Math.random(),v=Math.random(),th=u*6.283,ph=Math.acos(2*v-1);
+  const lump=1+.28*Math.sin(th*3+ph*2)+.18*Math.sin(ph*5-th*2);
+  const r=(1.7*lump)*(.82+Math.random()*.3);
+  pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.cos(ph);pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+  seed[i]=Math.random();const c=pal[Math.random()*pal.length|0];col.set([c.r,c.g,c.b],i*3)}
+const geo=new T.BufferGeometry();geo.setAttribute('position',new T.BufferAttribute(pos,3));
+geo.setAttribute('aSeed',new T.BufferAttribute(seed,1));geo.setAttribute('aCol',new T.BufferAttribute(col,3));
+const U={uT:{value:0},uP:{value:new T.Vector3(99,99,99)},uPx:{value:renderer.getPixelRatio()},uPulse:{value:0}};
+const mat=new T.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,blending:T.AdditiveBlending,
+ vertexShader:`attribute float aSeed;attribute vec3 aCol;uniform float uT,uPx,uPulse;uniform vec3 uP;varying vec3 vC;varying float vA;
+ void main(){vec3 p=position;float b=1.+.05*sin(uT*1.3+p.y*1.5)+uPulse*.25;p*=b;
+  p+=normalize(p)*.06*sin(uT*2.+aSeed*40.);
+  vec4 w=modelMatrix*vec4(p,1.);vec3 d=w.xyz-uP;float l=length(d);w.xyz+=normalize(d)*smoothstep(1.6,0.,l)*.9;
+  vec4 mv=viewMatrix*w;gl_Position=projectionMatrix*mv;
+  float tw=.5+.5*sin(uT*(2.+aSeed*5.)+aSeed*60.);vA=.25+.75*pow(tw,3.);vC=aCol;
+  gl_PointSize=(2.+aSeed*5.)*uPx*(9./-mv.z);}`,
+ fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 c=gl_PointCoord-.5;float d=length(c);
+  float shape=smoothstep(.5,.0,max(abs(c.x)*.9+abs(c.y)*.9,d));gl_FragColor=vec4(vC*1.3,shape*vA);}`});
+const pts=new T.Points(geo,mat);pts.position.y=2.4;scene.add(pts);
+// faint mirrored reflection in the floor
+const refl=new T.Points(geo,mat.clone());refl.material.uniforms=U;refl.material.opacity=.25;
+refl.scale.y=-1;refl.position.y=-3.4;scene.add(refl);
+// dark inner mass so the core reads as a solid with a glitter skin
+const mass=new T.Mesh(new T.SphereGeometry(1.35,48,32),new T.MeshStandardMaterial({color:0x0b0610,roughness:.4,metalness:.8,emissive:0x2a0a2e,emissiveIntensity:.6}));
+mass.position.y=2.4;scene.add(mass);
+
+// pointer + resize
+let mx=0,my=0,sx=0,sy=0,vis=false,pulse=0;const ray=new T.Raycaster(),mv2=new T.Vector2(),pl=new T.Plane(new T.Vector3(0,0,1),-0);
+box.addEventListener('pointermove',e=>{const r=box.getBoundingClientRect();mx=(e.clientX-r.left)/r.width*2-1;my=-((e.clientY-r.top)/r.height*2-1)});
+box.addEventListener('pointerleave',()=>{mx=my=0;U.uP.value.set(99,99,99)});
+box.addEventListener('click',()=>{pulse=1;const s=window.__snd;if(s&&s.on){s.tone(70,.8,'sine',.08);s.tone(1400,.6,'triangle',.03,.05)}});
+function size(){const r=box.getBoundingClientRect();renderer.setSize(r.width,r.height,false);cam.aspect=r.width/r.height;cam.updateProjectionMatrix()}
+addEventListener('resize',size);size();
+new IntersectionObserver(e=>{vis=e[0].isIntersecting},{threshold:.02}).observe(box);
+
+const clock=new T.Clock();
+function frame(){
+  requestAnimationFrame(frame);if(!vis)return;
+  const t=clock.getElapsedTime();U.uT.value=t;pulse*=.95;U.uPulse.value=pulse;
+  sx+=(mx-sx)*.05;sy+=(my-sy)*.05;
+  // scroll-driven dolly through the room
+  const r=box.getBoundingClientRect(),pr=Math.min(1,Math.max(0,1-(r.bottom)/(innerHeight+r.height)));
+  if(!reduce){cam.position.set(sx*2.4,1.2+sy*.8+ (pr-.5)*1.2,11-pr*3.2);cam.lookAt(0,2.2,0);
+    pts.rotation.y=refl.rotation.y=t*.12;mass.rotation.y=t*.12;cage.rotation.y=Math.sin(t*.1)*.05}
+  core.intensity=36+Math.sin(t*2)*6+pulse*60;
+  // pointer in world space at the core's depth
+  mv2.set(mx,my);ray.setFromCamera(mv2,cam);const h=new T.Vector3();
+  if(mx||my){ray.ray.intersectPlane(pl,h);if(h)U.uP.value.copy(h)}
+  renderer.render(scene,cam);
 }
-tick();
+frame();
 })();
