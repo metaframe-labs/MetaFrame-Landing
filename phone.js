@@ -161,7 +161,8 @@ function build(){
   const gc=document.createElement('canvas');gc.width=gc.height=256;const g=gc.getContext('2d');
   const gg=g.createLinearGradient(0,0,256,256);gg.addColorStop(.2,'rgba(255,255,255,0)');gg.addColorStop(.38,'rgba(255,255,255,.04)');gg.addColorStop(.5,'rgba(255,255,255,.14)');gg.addColorStop(.62,'rgba(255,255,255,.04)');gg.addColorStop(.8,'rgba(255,255,255,0)');g.fillStyle=gg;g.fillRect(0,0,256,256);
   glareTex=new THREE.CanvasTexture(gc);glareTex.wrapS=glareTex.wrapT=THREE.ClampToEdgeWrapping;glareTex.repeat.set(1,1);
-  const glare=new THREE.Mesh(new THREE.PlaneGeometry(2.0,sh),new THREE.MeshBasicMaterial({map:glareTex,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+  const gGeo=new THREE.ShapeGeometry(rr(1.96,sh-.04,.27),24);{const ps=gGeo.attributes.position,uv=gGeo.attributes.uv;for(let k=0;k<ps.count;k++)uv.setXY(k,ps.getX(k)/1.96+.5,ps.getY(k)/(sh-.04)+.5)}
+  const glare=new THREE.Mesh(gGeo,new THREE.MeshBasicMaterial({map:glareTex,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
   glare.position.z=.19;phone.add(glare);
 
   // back plate + camera bump
