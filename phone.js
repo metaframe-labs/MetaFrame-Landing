@@ -112,11 +112,11 @@ function drawBack(i){
   const W=512,H=1058,cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');
   c.save();rrect(c,0,0,W,H,95);c.clip();
   const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,mix(i.color,0,.1));g.addColorStop(1,mix(i.color,0,.7));c.fillStyle=g;c.fillRect(0,0,W,H);
-  const sh=c.createLinearGradient(0,0,W,H);sh.addColorStop(.3,'rgba(255,255,255,0)');sh.addColorStop(.5,'rgba(255,255,255,.18)');sh.addColorStop(.7,'rgba(255,255,255,0)');c.fillStyle=sh;c.fillRect(0,0,W,H);
+  const sh=c.createLinearGradient(0,0,W,H);sh.addColorStop(.3,'rgba(255,255,255,0)');sh.addColorStop(.5,'rgba(255,255,255,.06)');sh.addColorStop(.7,'rgba(255,255,255,0)');c.fillStyle=sh;c.fillRect(0,0,W,H);
   // frosted-glass grain
   const im=c.getImageData(0,0,W,H),d=im.data;for(let k=0;k<d.length;k+=4){const n=(Math.random()-.5)*14;d[k]+=n;d[k+1]+=n;d[k+2]+=n}c.putImageData(im,0,0);
   // soft top-left sheen + edge vignette
-  const rg2=c.createRadialGradient(W*.25,H*.18,10,W*.25,H*.18,W*.9);rg2.addColorStop(0,'rgba(255,255,255,.22)');rg2.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=rg2;c.fillRect(0,0,W,H);
+  const rg2=c.createRadialGradient(W*.25,H*.18,10,W*.25,H*.18,W*.9);rg2.addColorStop(0,'rgba(255,255,255,.08)');rg2.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=rg2;c.fillRect(0,0,W,H);
   const vg=c.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.65);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');c.fillStyle=vg;c.fillRect(0,0,W,H);
   const dk=lum(i.color)<.55,fc=dk?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)';
   // subtle etched logo, like a real phone
@@ -129,7 +129,7 @@ function drawBack(i){
   c.font='300 28px "Space Grotesk","Inter",system-ui,sans-serif';c.fillStyle=dk?'rgba(255,255,255,.65)':'rgba(0,0,0,.55)';c.fillText(' Labs',x0+w1,yy);
   c.restore();
   c.fillStyle=wf;c.globalAlpha=.5;c.fillRect(W/2-16,yy+18,32,2);c.globalAlpha=1;
-  c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;rrect(c,2,2,W-4,H-4,93);c.stroke();  c.restore();
+  c.strokeStyle='rgba(255,255,255,.08)';c.lineWidth=3;rrect(c,2,2,W-4,H-4,93);c.stroke();  c.restore();
   const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;return t;
 }
 
@@ -165,7 +165,7 @@ function build(){
   glare.position.z=.19;phone.add(glare);
 
   // back plate + camera bump
-  backMat=new THREE.MeshPhysicalMaterial({metalness:.15,roughness:.45,clearcoat:.8,clearcoatRoughness:.25,transparent:true,alphaTest:.02});
+  backMat=new THREE.MeshPhysicalMaterial({metalness:.03,roughness:.75,clearcoat:.15,clearcoatRoughness:.6,transparent:true,alphaTest:.02});
   const back=new THREE.Mesh(new THREE.PlaneGeometry(2.14,2.14*1058/512),backMat);back.rotation.y=Math.PI;back.position.z=-.175;phone.add(back);
   bump=new THREE.Group();bump.position.set(.5,1.5,-.2);bump.rotation.y=Math.PI;phone.add(bump);
   const isl=new THREE.ExtrudeGeometry(rr(1.0,1.0,.28),{depth:.05,bevelEnabled:true,bevelThickness:.03,bevelSize:.03,bevelSegments:6,curveSegments:16});isl.translate(0,0,-.02);
