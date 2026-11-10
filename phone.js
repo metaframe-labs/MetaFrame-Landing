@@ -159,8 +159,8 @@ function build(){
   const sh=2.0*SH/SW;
   const screen=new THREE.Mesh(new THREE.PlaneGeometry(2.0,sh),screenMat);screen.position.z=.18;phone.add(screen);
   const gc=document.createElement('canvas');gc.width=gc.height=256;const g=gc.getContext('2d');
-  const gg=g.createLinearGradient(0,0,256,256);gg.addColorStop(.35,'rgba(255,255,255,0)');gg.addColorStop(.5,'rgba(255,255,255,.3)');gg.addColorStop(.65,'rgba(255,255,255,0)');g.fillStyle=gg;g.fillRect(0,0,256,256);
-  glareTex=new THREE.CanvasTexture(gc);glareTex.wrapS=glareTex.wrapT=THREE.RepeatWrapping;glareTex.repeat.set(1.4,1.4);
+  const gg=g.createLinearGradient(0,0,256,256);gg.addColorStop(.2,'rgba(255,255,255,0)');gg.addColorStop(.38,'rgba(255,255,255,.04)');gg.addColorStop(.5,'rgba(255,255,255,.14)');gg.addColorStop(.62,'rgba(255,255,255,.04)');gg.addColorStop(.8,'rgba(255,255,255,0)');g.fillStyle=gg;g.fillRect(0,0,256,256);
+  glareTex=new THREE.CanvasTexture(gc);glareTex.wrapS=glareTex.wrapT=THREE.ClampToEdgeWrapping;glareTex.repeat.set(1,1);
   const glare=new THREE.Mesh(new THREE.PlaneGeometry(2.0,sh),new THREE.MeshBasicMaterial({map:glareTex,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
   glare.position.z=.19;phone.add(glare);
 
@@ -213,7 +213,7 @@ function frame(now){
   phone.rotation.y=rotY+(1-clamp(k,0,1))*-6.2832+0;
   phone.rotation.x=rotX;
   phone.position.y=Math.sin(now*.0015)*.12;
-  glareTex.offset.x=-phone.rotation.y*.35;glareTex.offset.y=phone.rotation.x*.3;
+  glareTex.offset.x=clamp(-Math.sin(phone.rotation.y)*.3,-.3,.3);glareTex.offset.y=clamp(phone.rotation.x*.2,-.3,.3);
   ring.rotation.y=now*.0002;ring.position.y=phone.position.y;
   if((fr++&1)===0){drawScreen(info,el);sTex.needsUpdate=true}
   renderer.render(scene,camera);
