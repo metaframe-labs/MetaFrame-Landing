@@ -193,7 +193,7 @@ function build(){
   canvas.addEventListener('pointermove',e=>{
     mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1;
     if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;
-    rotY+=dx*.012;vY=dx*.012;rotX=clamp(rotX+dy*.007,-.7,.7);
+    rotY+=dx*.012;vY=dx*.012;rotX=clamp(rotX+dy*.007,-1.3,1.3);
   });
   const up=()=>{drag=false};canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
   stage.querySelector('.x').onclick=close;
@@ -205,15 +205,13 @@ function frame(now){
   if(!open)return;raf=requestAnimationFrame(frame);
   const el=(now-t0)/1000,k=ease(clamp(el/1.3));
   if(!drag){
-    rotY+=vY;vY*=.94;
-    // once released, ease back to the front face (nearest multiple of 2PI) with a slow swing
-    if(Math.abs(vY)<.004){const home=Math.round(rotY/6.2832)*6.2832+Math.sin(now*.0006)*.4;rotY+=(home-rotY)*.035}
-    rotX+=(0-rotX)*.03;
+    rotY+=vY;vY*=.95;
+    // keep whatever angle the user left it at (inertia only)
   }
   phone.scale.setScalar(.2+.8*clamp(k,0,1.02));
   // entry spin ends exactly on the front face
-  phone.rotation.y=rotY+(1-clamp(k,0,1))*-6.2832+mx*.12;
-  phone.rotation.x=rotX+my*.07;
+  phone.rotation.y=rotY+(1-clamp(k,0,1))*-6.2832+0;
+  phone.rotation.x=rotX;
   phone.position.y=Math.sin(now*.0015)*.12;
   glareTex.offset.x=-phone.rotation.y*.35;glareTex.offset.y=phone.rotation.x*.3;
   ring.rotation.y=now*.0002;ring.position.y=phone.position.y;
