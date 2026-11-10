@@ -1,0 +1,28 @@
+/* ---------- repo-intelligence-layer showcase: layered depth scene ---------- */
+#intel{padding:120px 5vw}
+#intel .stage{position:relative;height:min(78vh,720px);min-height:520px;margin-top:40px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#0d1511 0%,#07070a 75%);perspective:1200px;isolation:isolate}
+#intel .layer{position:absolute;inset:-6%;will-change:transform;pointer-events:none;transition:transform .12s linear}
+#intel canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#intel .grid{background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px;opacity:.35;-webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);transform-origin:50% 100%}
+#intel .scan{position:absolute;left:0;right:0;height:140px;top:-140px;background:linear-gradient(transparent,rgba(39,227,154,.16),transparent);border-bottom:1px solid rgba(39,227,154,.5);animation:iscan 6s linear infinite;mix-blend-mode:screen;z-index:4;pointer-events:none}
+@keyframes iscan{to{top:100%}}
+#intel .vig{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),transparent 0,transparent 25%,rgba(0,0,0,.55) 100%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+#intel .hud{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(18px,3vw,36px);pointer-events:none}
+#intel .hud>*{pointer-events:auto}
+#intel .top{display:flex;justify-content:space-between;gap:20px;font:12px 'JetBrains Mono',monospace;color:var(--em)}
+#intel .top span:last-child{color:var(--dim)}
+#intel h3.ttl{font-size:clamp(2rem,6vw,5rem);line-height:1;letter-spacing:-.03em;font-weight:700;transform:translateZ(60px)}
+#intel h3.ttl em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--fg)}
+#intel .sub{max-width:560px;color:var(--dim);margin-top:14px;font-size:clamp(.9rem,1.4vw,1.05rem)}
+#intel .gates{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}
+#intel .gate{font:11px 'JetBrains Mono',monospace;padding:10px 8px;border:1px solid var(--line);border-radius:8px;background:rgba(7,7,10,.65);backdrop-filter:blur(6px);color:var(--dim);transition:.35s;position:relative;overflow:hidden}
+#intel .gate b{display:block;color:var(--fg);font-weight:500;margin-top:2px}
+#intel .gate.on{border-color:var(--em);color:var(--em);box-shadow:0 0 24px rgba(39,227,154,.35),inset 0 0 18px rgba(39,227,154,.12);transform:translateY(-4px)}
+#intel .gate.on::after{content:"PASS";position:absolute;right:6px;top:6px;font-size:9px}
+#intel .cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+#intel .cta a{font:600 .85rem 'JetBrains Mono',monospace;text-decoration:none;color:#07070a;background:var(--em);padding:12px 20px;border-radius:999px;transition:transform .2s,box-shadow .2s}
+#intel .cta a:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 0 30px rgba(39,227,154,.5)}
+#intel .cta code{font:12px 'JetBrains Mono',monospace;color:var(--dim)}
+#intel .stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:18px;font:12px 'JetBrains Mono',monospace;color:var(--dim)}
+#intel .stats b{display:block;color:var(--fg);font-size:1.6rem;font-family:'Space Grotesk',sans-serif}
+@media(max-width:800px){#intel .gates{grid-template-columns:repeat(3,1fr)}#intel .stage{min-height:640px}}

@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="icons/MetaBox.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="cards.css">
+  <link rel="stylesheet" href="intel.css">
 </head>
 <body>
 <div id="boot"><pre id="bootlog"></pre></div>
@@ -22,7 +23,7 @@
 
 <nav>
   <a class="logo" href="#top"><span>M</span>etaFrame<i>/labs</i></a>
-  <div class="links"><a href="#lab">Lab</a><a href="#console">Console</a><a href="#products">Products</a><a href="#principles">Principles</a><a href="#contact">Contact</a></div>
+  <div class="links"><a href="#lab">Lab</a><a href="#console">Console</a><a href="#products">Products</a><a href="#intel">Open source</a><a href="#principles">Principles</a><a href="#contact">Contact</a></div>
 </nav>
 
 <header id="top">
@@ -67,8 +68,30 @@
   <div class="cards" id="cards"></div>
 </section>
 
-<section id="principles">
-  <h2><small>04</small> Operating principles</h2>
+  <section id="intel">
+    <h2><small>04</small> Open source</h2>
+    <div class="stage">
+      <div class="layer grid" data-z="0.012"></div>
+      <div class="layer" data-z="0.012"><canvas></canvas></div>
+      <div class="layer" data-z="0.03"><canvas></canvas></div>
+      <div class="layer" data-z="0.07"><canvas></canvas></div>
+      <div class="scan"></div><div class="vig"></div>
+      <div class="hud">
+        <div class="top"><span>// REPO-INTELLIGENCE-LAYER</span><span>TypeScript / React-Native &middot; agent-ready</span></div>
+        <div>
+          <h3 class="ttl" data-t="Repo intelligence layer">Repo <em>intelligence</em> layer</h3>
+          <p class="sub">A semantic knowledge graph and closed-loop verification layer so autonomous coding agents navigate a codebase with architectural certainty, without burning tens of thousands of tokens on raw source.</p>
+          <div class="gates">
+            <div class="gate">01<b>TypeScript</b></div><div class="gate">02<b>Blast radius</b></div><div class="gate">03<b>Theme tokens</b></div>
+            <div class="gate">04<b>Zero-emoji</b></div><div class="gate">05<b>i18n integrity</b></div><div class="gate">06<b>AST health</b></div>
+          </div>
+          <div class="cta"><a data-cursor="open" href="https://github.com/neurodivergent-dev/repo-intelligence-layer" target="_blank" rel="noopener">VIEW ON GITHUB &#8599;</a><code>click the scene to pulse the graph</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="principles">
+  <h2><small>05</small> Operating principles</h2>
   <ol class="rules">
     <li><b>Intelligence at the edge.</b> Your data belongs on your device first.</li>
     <li><b>Ship small, ship real.</b> A product in hands beats a deck on a screen.</li>
@@ -78,7 +101,7 @@
 </section>
 
 <section id="contact">
-  <h2><small>05</small> Open a channel</h2>
+  <h2><small>06</small> Open a channel</h2>
   <a class="big" id="mail" href="mailto:metaframe.labs@proton.me">metaframe.labs@proton.me</a>
   <p class="note">Also find us on Google Play: “MetaFrame Labs”.</p>
 </section>
@@ -93,5 +116,6 @@
 <script src="icons-data.js"></script>
 <script src="phone.js"></script>
 <script src="cards.js"></script>
+  <script src="intel.js"></script>
 </body>
 </html>
