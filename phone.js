@@ -164,7 +164,7 @@ function build(){
   ring=new THREE.Points(rg,new THREE.PointsMaterial({size:.035,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(ring);
 
   const size=()=>{const w=innerWidth,h=innerHeight,m=w<800;renderer.setSize(w,h,false);camera.aspect=w/h;
-    camera.position.set(m?0:-1.6,0,m?13.5:10.5);camera.lookAt(m?0:-1.6,0,0);camera.updateProjectionMatrix()};
+    camera.position.set(0,0,m?13.5:10.5);camera.lookAt(0,0,0);camera.updateProjectionMatrix()};
   addEventListener('resize',size);size();
 
   canvas.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(e.pointerId)});
