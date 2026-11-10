@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" href="icons/MetaBox.png">
 <link rel="apple-touch-icon" href="icons/MetaBox.png">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="cards.css">
 </head>
 <body>
 <div id="boot"><pre id="bootlog"></pre></div>
@@ -43,18 +44,23 @@
 </section>
 
 <section id="console">
-  <h2><small>02</small> Idea → App, live</h2>
-  <div class="term">
-    <div class="bar"><i></i><i></i><i></i><span>metabox://prompt</span></div>
-    <div class="body">
-      <div class="chips" id="chips"></div>
-      <div class="out" id="out"></div>
-      <form id="form"><span>&gt;</span><input id="inp" autocomplete="off" placeholder="describe an app… or click a chip" maxlength="80"><button>build</button></form>
+  <h2><small>02</small> Idea &rarr; App, live</h2>
+  <div class="forge">
+    <div class="forge-stage" id="forgeStage" data-cursor="drag">
+      <div class="fhud"><span id="fstate">IDLE</span><span id="fstat"></span></div>
+      <div class="fsteps" id="fsteps"><b>parse</b><b>wire</b><b>compose</b><b>ship</b></div>
+    </div>
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i><span>metabox://prompt</span></div>
+      <div class="body">
+        <div class="chips" id="chips"></div>
+        <div class="out" id="out"></div>
+        <form id="form"><span>&gt;</span><input id="inp" autocomplete="off" placeholder="describe an app… or click a chip" maxlength="80"><button>build</button></form>
+      </div>
     </div>
   </div>
-  <p class="note">A simulation of the Meta Box workflow: describe it, watch it get assembled.</p>
+  <p class="note">A simulation of the Meta Box workflow: type anything &mdash; the particles spell it, then assemble your app.</p>
 </section>
-
 <section id="products">
   <h2><small>03</small> The Cartridges</h2>
   <p class="lead">Every product is a cartridge. Hover to inspect, click to flip.</p>
@@ -74,13 +80,18 @@
 <section id="contact">
   <h2><small>05</small> Open a channel</h2>
   <a class="big" id="mail" href="mailto:metaframe.labs@proton.me">metaframe.labs@proton.me</a>
-  <p class="note">Replace this address with your real one. Also find us on Google Play: “MetaFrame Labs”.</p>
+  <p class="note">Also find us on Google Play: “MetaFrame Labs”.</p>
 </section>
 
 <footer>© <span id="y"></span> MetaFrame Labs — Building intelligent products at scale. <button id="konami" title="try the Konami code">◆</button></footer>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="main.js"></script>
+<script src="forge.js"></script>
 <script src="fx.js"></script>
+<script src="wow.js"></script>
+<script src="icons-data.js"></script>
+<script src="phone.js"></script>
+<script src="cards.js"></script>
 </body>
 </html>

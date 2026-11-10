@@ -1,4 +1,4 @@
-// ---------- boot sequence ----------
+﻿// ---------- boot sequence ----------
 const lines=['> mounting metaframe.core ...','> loading models ............ ok','> privacy layer ............. ON','> telemetry ................. none','> welcome to the lab.'];
 const boot=document.getElementById('boot'),log=document.getElementById('bootlog');
 let bi=0;(function nx(){if(bi<lines.length){log.textContent+=lines[bi++]+'\n';setTimeout(nx,260)}else setTimeout(()=>boot.classList.add('done'),400)})();
@@ -51,31 +51,11 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return
   io.unobserve(e.target)}),{threshold:.2});
 document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 
-// ---------- console demo ----------
-const demos={
-  'currency converter':['Parsing intent: live FX exchange','Wiring rates API ........ ok','Generating UI: 2 inputs, 1 chart','Applying dark + emerald theme'],
-  'pomodoro focus timer':['Parsing intent: focus session tool','Adding timer engine ..... ok','Generating UI: ring timer, streaks','Offline mode enabled'],
-  'tiny puzzle game':['Parsing intent: mini game','Building game loop ....... ok','Generating UI: grid, score, haptics','Balancing difficulty'],
-  'dev news stream':['Parsing intent: technical feed','Aggregating sources ..... ok','Generating UI: cards, filters','Caching for offline reading']
-};
-const out=document.getElementById('out'),inp=document.getElementById('inp'),chips=document.getElementById('chips');
-Object.keys(demos).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>run(k);chips.append(b)});
-let busy=false;
-async function run(q){
-  if(busy)return;busy=true;const steps=demos[q]||['Parsing intent: "'+q+'"','Selecting components ..... ok','Generating UI: custom layout','Compiling to a runnable app'];
-  out.innerHTML='$ metabox build "'+q.replace(/</g,'&lt;')+'"\n';
-  for(const s of steps){await new Promise(r=>setTimeout(r,550));out.append('→ '+s+'\n')}
-  await new Promise(r=>setTimeout(r,500));
-  const ph=document.createElement('div');ph.className='phone';
-  for(let i=0;i<8;i++){const d=document.createElement('div');d.style.animationDelay=i*.12+'s';d.style.width=(40+Math.random()*60)+'%';ph.append(d)}
-  out.append('\n✔ App ready in 2.8s\n',ph);busy=false;
-}
-document.getElementById('form').onsubmit=e=>{e.preventDefault();if(inp.value.trim()){run(inp.value.trim());inp.value=''}};
 
 // ---------- product cards ----------
 const prods=[
   ['Meta Box','Create apps with AI','#27e39a','MetaBox','Describe an app or mini game, get it built. The flagship of the lab.'],
-  ['Neurodivergence','Consciousness','#e8e8e8','Neurodivergence','Exploring how different minds work — and building for them.'],
+  ['Neurodivergence','Consciousness','#e8e8e8','Neurodivergence','Exploring how different minds work â€” and building for them.'],
   ['Mindhouse','AI study companion','#5b7bff','Mindhouse','A study partner that adapts to how you learn.'],
   ['Divergent AI','Think differently','#a84dff','Divergentai','An AI that embraces non-linear thinking.'],
   ['FocusTabs','Stay in flow','#b06bff','FocusTabs','Tame your tabs, protect your attention.'],
@@ -93,7 +73,7 @@ prods.forEach((p,i)=>{
   cards.append(c);io.observe(c);
 });
 
-// ---------- easter egg: Konami / ◆ switches theme ----------
+// ---------- easter egg: Konami / â—† switches theme ----------
 const seq='ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba';let buf='';
 addEventListener('keydown',e=>{buf=(buf+e.key).slice(-seq.length);if(buf===seq)document.body.classList.toggle('em')});
 document.getElementById('konami').onclick=()=>document.body.classList.toggle('em');

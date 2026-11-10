@@ -63,6 +63,8 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(50,1,.1,100);camera.position.z=7;
 const group=new THREE.Group();scene.add(group);
+// hooks for wow.js (post-processing, camera path, sound, click shockwave)
+const mf=window.__mf={renderer,scene,camera,group,pulse:0,vel:0,section:0,render:null,mouse:{x:0,y:0}};
 
 // --- shapes ---
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -165,14 +167,16 @@ function frame(t){
     const e=ease*(.35+s*.65);
     let px=pos[i3]+(ax-pos[i3])*e,py=pos[i3+1]+(ay-pos[i3+1])*e,pz=pos[i3+2]+(az-pos[i3+2])*e;
     const dx=px-mxw,dy=py-myw,d2=dx*dx+dy*dy;
-    if(d2<.9){const f=(1-d2/.9)*.16/Math.sqrt(d2+.01);px+=dx*f;py+=dy*f;pz+=(s-.5)*f*.6}
+    const R=.9+mf.pulse*9;
+    if(d2<R){const f=(1-d2/R)*(.16+mf.pulse*.7)/Math.sqrt(d2+.01);px+=dx*f;py+=dy*f;pz+=(s-.5)*f*(.6+mf.pulse*4)}
     pos[i3]=px;pos[i3+1]=py;pos[i3+2]=pz;
   }
   geo.attributes.position.needsUpdate=true;
   mat.uniforms.uT.value=tm;
   // theme colour follows the easter egg
   const g=getComputedStyle(document.body).getPropertyValue('--gold').trim();if(g&&mat.uniforms.uC1.value.getStyle()!==g)mat.uniforms.uC1.value.set(g);
-  renderer.render(scene,camera);
+  mf.pulse*=.93;mf.vel=vel;mf.section=target;mf.mouse.x=mouseN.x;mf.mouse.y=mouseN.y;
+  if(mf.render)mf.render(tm);else renderer.render(scene,camera);
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
