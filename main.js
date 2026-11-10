@@ -55,7 +55,7 @@ document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 // ---------- product cards ----------
 const prods=[
   ['Meta Box','Create apps with AI','#27e39a','MetaBox','Describe an app or mini game, get it built. The flagship of the lab.'],
-  ['Neurodivergence','Consciousness','#e8e8e8','Neurodivergence','Exploring how different minds work — and building for them.'],
+  ['Neurodivergence','Consciousness','#e8e8e8','Neurodivergence','Exploring how different minds work and building for them.'],
   ['Mindhouse','AI study companion','#5b7bff','Mindhouse','A study partner that adapts to how you learn.'],
   ['Divergent AI','Think differently','#a84dff','Divergentai','An AI that embraces non-linear thinking.'],
   ['FocusTabs','Stay in flow','#b06bff','FocusTabs','Tame your tabs, protect your attention.'],
@@ -73,7 +73,7 @@ prods.forEach((p,i)=>{
   cards.append(c);io.observe(c);
 });
 
-// ---------- easter egg: Konami / â—† switches theme ----------
+// ---------- easter egg: Konami switches theme ----------
 const seq='ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba';let buf='';
 addEventListener('keydown',e=>{buf=(buf+e.key).slice(-seq.length);if(buf===seq)document.body.classList.toggle('em')});
 document.getElementById('konami').onclick=()=>document.body.classList.toggle('em');
