@@ -2,7 +2,7 @@
 (function(){
 if(!window.THREE)return;
 let stage,canvas,renderer,scene,camera,phone,screenMat,glareTex,ring,light,info,raf=0,open=false;
-let rotY=0,rotX=0,vY=0,drag=false,lx=0,ly=0,t0=0,mx=0,my=0,fr=0;
+let rotY=0,rotX=0,vY=0,drag=false,lx=0,ly=0,t0=0,mx=0,my=0,fr=0,baseY=0;
 let sCv,sCtx,sTex,iconImg=null,backMat,bump;
 const SW=512,SH=1088;
 
@@ -187,7 +187,16 @@ function build(){
   ring=new THREE.Points(rg,new THREE.PointsMaterial({size:.035,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(ring);
 
   const size=()=>{const w=innerWidth,h=innerHeight,m=w<800;renderer.setSize(w,h,false);camera.aspect=w/h;
-    camera.position.set(0,0,m?13.5:10.5);camera.lookAt(0,0,0);camera.updateProjectionMatrix()};
+    camera.position.set(0,0,m?13.5:10.5);camera.lookAt(0,0,0);camera.updateProjectionMatrix();
+    // mobile: the info panel sits at the bottom, lift the phone so it never covers the text
+    baseY=0;
+    if(m&&stage){
+      const z=13.5,visH=2*z*Math.tan(camera.fov*Math.PI/360);
+      const pr=stage.querySelector('.panel').getBoundingClientRect();
+      const free=(h-pr.top)/h;                       // screen fraction free above the panel
+      const half=2.4/visH;                            // phone half-height as screen fraction
+      baseY=clamp((free+.03+half-.5)*visH,0,Math.max(0,visH/2-2.6));
+    }};
   addEventListener('resize',size);size();
 
   canvas.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;canvas.setPointerCapture(e.pointerId)});
@@ -213,7 +222,7 @@ function frame(now){
   // entry spin ends exactly on the front face
   phone.rotation.y=rotY+(1-clamp(k,0,1))*-6.2832+0;
   phone.rotation.x=rotX;
-  phone.position.y=Math.sin(now*.0015)*.12;
+  phone.position.y=baseY+Math.sin(now*.0015)*.12;
   glareTex.offset.x=clamp(-Math.sin(phone.rotation.y)*.3,-.3,.3);glareTex.offset.y=clamp(phone.rotation.x*.2,-.3,.3);
   ring.rotation.y=now*.0002;ring.position.y=phone.position.y;
   if((fr++&1)===0){drawScreen(info,el);sTex.needsUpdate=true}
