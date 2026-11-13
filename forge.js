@@ -145,20 +145,28 @@ function initGL(){
 
   // --- targets ---
   const gauss=()=>(Math.random()+Math.random()+Math.random()-1.5)/1.5;
-  function galaxy(){
-    const pos=mk(3),col=mk(3);
+  function box(){ // the Meta Box: dense edges, sparse faces, gold sparks
+    const pos=mk(3),col=mk(3),s=1.7;
     for(let i=0;i<N;i++){
-      const arm=i%3,r=Math.pow(Math.random(),.65)*3.5+.15,th=arm*2.0944+r*1.15+gauss()*.28/(.4+r*.3);
-      pos[i*3]=Math.cos(th)*r;pos[i*3+1]=Math.sin(th)*r*.82;pos[i*3+2]=gauss()*.25*(1.2-r/4);
-      const t=clamp(r/3.6),k=Math.random()<.06?1:0;
-      col[i*3]=k?1:1-t*.85;col[i*3+1]=k?1:.7+t*.2;col[i*3+2]=k?1:.15+t*.35;
+      let a;
+      if(Math.random()<.55){ // edge: two axes pinned, one sweeping
+        a=[(Math.random()<.5?-s:s),(Math.random()<.5?-s:s),(Math.random()<.5?-s:s)];
+        a[(Math.random()*3)|0]=(Math.random()*2-1)*s;
+      }else{ // face: one axis pinned, two sweeping
+        a=[(Math.random()*2-1)*s,(Math.random()*2-1)*s,(Math.random()*2-1)*s];
+        a[(Math.random()*3)|0]=Math.random()<.5?-s:s;
+      }
+      pos[i*3]=a[0];pos[i*3+1]=a[1];pos[i*3+2]=a[2];
+      const edge=Math.random()<.55,gold=Math.random()<.07,br=edge?1:.42;
+      if(gold){col[i*3]=1;col[i*3+1]=.7;col[i*3+2]=.12}
+      else{col[i*3]=.15*br;col[i*3+1]=.89*br;col[i*3+2]=.6*br}
     }
     return{pos,col};
   }
   function bitmap(cv,scale,zj){
     const w=cv.width,h=cv.height,d=cv.getContext('2d').getImageData(0,0,w,h).data,idx=[];
     for(let i=0;i<w*h;i++)if(d[i*4+3]>10)idx.push(i);
-    if(!idx.length)return galaxy();
+    if(!idx.length)return box();
     const pos=mk(3),col=mk(3);
     for(let n=0;n<N;n++){
       let i=idx[Math.random()*idx.length|0];
@@ -169,8 +177,8 @@ function initGL(){
     }
     return{pos,col};
   }
-  const gal=galaxy();
-  A.from.set(gal.pos);A.to.set(gal.pos);A.cf.set(gal.col);A.ct.set(gal.col);
+  const home=box();
+  A.from.set(home.pos);A.to.set(home.pos);A.cf.set(home.col);A.ct.set(home.col);
 
   // --- tweens ---
   const tws=[];
@@ -232,7 +240,7 @@ function initGL(){
   requestAnimationFrame(frame);
 
   return{
-    galaxy(){tw(S,'spin',1,1.4);tw(S,'chaos',0,1);return retarget(galaxy(),1.8)},
+    idle(){tw(S,'spin',1,1.4);tw(S,'chaos',0,1);return retarget(box(),1.8)},
     text(str){tw(S,'spin',0,.8);return retarget(bitmap(textCanvas(str),.0062,.25),1.1)},
     chaos(v,d=1){return tw(S,'chaos',v,d)},
     phone(app,q){
@@ -284,29 +292,60 @@ async function build(q){
 }
 
 // chips
+let userTouched=false; // first real interaction stops the idle auto-demo forever
 Object.keys(APPS).forEach(k=>{
   const b=document.createElement('button');b.type='button';b.textContent=k;b.dataset.cursor='run';
-  b.onclick=()=>build(k);
+  b.onclick=()=>{userTouched=true;build(k)};
   b.onpointerenter=()=>{if(!busy&&V&&mode!=='ready'){setState('PREVIEW');V.text(k)}};
-  b.onpointerleave=()=>{if(!busy&&V&&mode!=='ready'){const v=inp.value.trim();v?V.text(v):V.galaxy();setState(v?'TYPING':'IDLE')}};
+  b.onpointerleave=()=>{if(!busy&&V&&mode!=='ready'){const v=inp.value.trim();v?V.text(v):V.idle();setState(v?'TYPING':'IDLE')}};
   chips.append(b);
 });
-form.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(v){inp.value='';build(v)}};
+form.onsubmit=e=>{e.preventDefault();userTouched=true;const v=inp.value.trim();if(v){inp.value='';build(v)}};
 let typeT=0;
 inp.addEventListener('input',()=>{
+  userTouched=true;
   if(busy||!V)return;mode='typing';
   clearTimeout(typeT);V.pulse(.45,.9);
-  typeT=setTimeout(()=>{const v=inp.value.trim().slice(0,28);if(busy)return;if(v){setState('TYPING');V.text(v)}else{mode='idle';setState('IDLE');V.galaxy()}},140);
+  typeT=setTimeout(()=>{const v=inp.value.trim().slice(0,28);if(busy)return;if(v){setState('TYPING');V.text(v)}else{mode='idle';setState('IDLE');V.idle()}},140);
 });
 stage.addEventListener('click',()=>{
   if(!V||busy||mode!=='ready')return;
-  mode='idle';setState('SHATTERED');V.pulse(1,1.2);V.chaos(.9,.5).then(()=>V.galaxy());setStep(-1);
+  userTouched=true;mode='idle';setState('SHATTERED');V.pulse(1,1.2);V.chaos(.9,.5).then(()=>V.idle());setStep(-1);
 });
-// intro: spell "IDEA" the first time the stage scrolls into view
-if(V){
-  let seen=false;
-  new IntersectionObserver((es,ob)=>{if(!es[0].isIntersecting||seen)return;seen=true;ob.disconnect();
-    setTimeout(()=>{if(busy||mode!=='idle'||inp.value)return;setState('SPELLING');V.text('Idea → App').then(async()=>{await sleep(1300);if(!busy&&mode==='idle'&&!inp.value){setState('IDLE');V.galaxy()}})},500)},{threshold:.5}).observe(stage);
+
+// ---------- idle auto-demo: the forge builds on its own until the visitor steps in ----------
+let stageVis=false;
+new IntersectionObserver(e=>{stageVis=e[0].isIntersecting},{threshold:.05}).observe(stage);
+async function idleWait(ms){ // wait, but freeze while offscreen and abort on user touch
+  const t0=performance.now();
+  while(performance.now()-t0<ms){
+    if(userTouched)return false;
+    if(stageVis&&!document.hidden)await sleep(150);else await sleep(350);
+  }
+  return !userTouched;
 }
+async function demoLoop(){
+  const keys=Object.keys(APPS);let i=(Math.random()*keys.length)|0;
+  for(;;){
+    if(!await idleWait(1600))return;
+    await build(keys[i]);
+    if(!await idleWait(4600))return; // admire the finished phone
+    if(!userTouched){mode='idle';setState('SHATTERED');if(V){V.pulse(1,1.2);await V.chaos(.9,.5).then(()=>V.idle())}setStep(-1)}
+    i=(i+1)%keys.length;
+  }
+}
+// intro: spell "Idea → App" on first view, then hand over to the auto-demo
+let seen=false;
+new IntersectionObserver((es,ob)=>{if(!es[0].isIntersecting||seen)return;seen=true;ob.disconnect();
+  (async()=>{
+    await sleep(500);
+    if(busy||mode!=='idle'||inp.value)return;
+    setState('SPELLING');
+    if(V){await V.text('Idea → App');await sleep(1300)}
+    if(busy||mode!=='idle'||inp.value||userTouched)return;
+    setState('IDLE');demoLoop();
+  })();
+},{threshold:.35}).observe(stage);
+if(!V)demoLoop(); // no webgl: still fill the terminal
 setStep(-1);setState('IDLE');
 })();
