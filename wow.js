@@ -118,27 +118,31 @@ const snd={on:false,ctx:null,master:null,wind:null,windG:null,last:0,sec:0,
   init(){
     const A=window.AudioContext||window.webkitAudioContext;if(!A)return false;
     const c=this.ctx=new A(),m=this.master=c.createGain();m.gain.value=0;m.connect(c.destination);
-    // generative music: chill chord loop (Am-F-C-G) with pad, bass, plucked arpeggio and soft beat
+    // generative music: midnight-lab synthwave — descending Am-G-F-E, saw bass pulse, 16th arp, four-on-floor
     const mus=this.mus=c.createGain();mus.gain.value=.9;mus.connect(m);
-    const dly=c.createDelay();dly.delayTime.value=.375;const fb=c.createGain();fb.gain.value=.3;const dg=c.createGain();dg.gain.value=.35;
+    const bpm=104,sp=60/bpm/4;
+    const dly=c.createDelay();dly.delayTime.value=sp*3;const fb=c.createGain();fb.gain.value=.34;const dg=c.createGain();dg.gain.value=.3;
     mus.connect(dly);dly.connect(fb).connect(dly);dly.connect(dg).connect(m);
+    const bb=c.createGain();const blp=c.createBiquadFilter();blp.type='lowpass';blp.frequency.value=620;bb.connect(blp).connect(mus);
     const nz=c.createBuffer(1,c.sampleRate,c.sampleRate),nd=nz.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
-    const hz=n=>440*Math.pow(2,(n-69)/12),prog=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bpm=96,sp=60/bpm/4;
+    const hz=n=>440*Math.pow(2,(n-69)/12),prog=[[57,60,64],[55,59,62],[53,57,60],[52,56,59]];
     const note=(f,t,dur,type,v,dest)=>{const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;
       g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(dest||mus);o.start(t);o.stop(t+dur+.05)};
-    const pad=(f,t,dur,v)=>{const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=f;
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.4);g.gain.linearRampToValueAtTime(v*.7,t+dur-.3);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g).connect(mus);o.start(t);o.stop(t+dur+.05)};
+    const pad=(f,t,dur,v)=>{[f,f*1.004].forEach((fr,k)=>{const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=fr;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v*(k?.6:1),t+.3);g.gain.linearRampToValueAtTime(v*.55,t+dur-.3);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g).connect(mus);o.start(t);o.stop(t+dur+.05)})};
     const hat=(t,v)=>{const s=c.createBufferSource();s.buffer=nz;const h=c.createBiquadFilter();h.type='highpass';h.frequency.value=7000;const g=c.createGain();
       g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.05);s.connect(h).connect(g).connect(mus);s.start(t);s.stop(t+.06)};
+    const snare=(t,v)=>{const s=c.createBufferSource();s.buffer=nz;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=1700;f.Q.value=.9;const g=c.createGain();
+      g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.14);s.connect(f).connect(g).connect(mus);s.start(t);s.stop(t+.15)};
     const kick=t=>{const o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);
-      g.gain.setValueAtTime(.22,t);g.gain.exponentialRampToValueAtTime(.0001,t+.25);o.connect(g).connect(mus);o.start(t);o.stop(t+.3)};
-    const arp=[0,1,2,1,2,1,0,1],step={i:0,next:0};
+      g.gain.setValueAtTime(.18,t);g.gain.exponentialRampToValueAtTime(.0001,t+.25);o.connect(g).connect(mus);o.start(t);o.stop(t+.3)};
+    const step={i:0,next:0};
     const sched=()=>{if(!this.on)return;if(step.next<c.currentTime)step.next=c.currentTime+.05;
       while(step.next<c.currentTime+.25){const i=step.i,t=step.next,ch=prog[(i>>4)%4],s=i%16;
-        if(s===0){ch.forEach(n=>pad(hz(n+12),t,sp*16,.018));note(hz(ch[0]-12),t,sp*7,'sine',.16)}
-        if(s===8)note(hz(ch[0]-12),t,sp*4,'sine',.12);
-        if(s%2===0){const n=ch[arp[(s>>1)%8]]+12+(s%8===6?12:0);note(hz(n),t,.35,'triangle',.05)}
-        if(s%4===0&&(s===0||s===8))kick(t);if(s%2===1)hat(t,.025);
+        if(s===0)ch.forEach(n=>pad(hz(n+12),t,sp*16,.013));
+        if(s%2===0)note(hz(ch[0]-12+(s===14?12:0)),t,sp*1.7,'sawtooth',.06,bb);
+        note(hz(ch[(s>>1)%3]+12+(s%8<4?0:12)),t,sp*.95,'square',.023);
+        if(s%4===0)kick(t);if(s===4||s===12)snare(t,.05);if(s%2===1)hat(t,.02);
         step.i++;step.next+=sp}};
     this.timer=setInterval(sched,80);
     // wind: looped noise, level follows scroll speed
