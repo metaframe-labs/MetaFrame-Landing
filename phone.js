@@ -195,7 +195,7 @@ function build(){
       const pr=stage.querySelector('.panel').getBoundingClientRect();
       const free=(h-pr.top)/h;                       // screen fraction free above the panel
       const half=2.4/visH;                            // phone half-height as screen fraction
-      baseY=clamp((free+.03+half-.5)*visH,0,Math.max(0,visH/2-2.6));
+      baseY=clamp((free+.05+half-.5)*visH,0,Math.max(0,visH/2-2.6));
     }};
   addEventListener('resize',size);size();
 
