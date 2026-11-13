@@ -44,10 +44,13 @@ addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;cur.style
 const cur=document.getElementById('cursor');
 document.addEventListener('pointerover',e=>cur.classList.toggle('big',!!e.target.closest('a,button,.cart,input')));
 
-// ---------- reveal + counters ----------
+// ---------- reveal + counters (real values live in the HTML; the count-up is just polish) ----------
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('section h2,.stat,.lead,.term,.rules li,.big').forEach(e=>e.classList.add('reveal'));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');
-  const b=e.target.querySelector('[data-n]');if(b&&!b.done){b.done=1;const n=+b.dataset.n;let i=0;const t=setInterval(()=>{i+=Math.max(1,n/40);if(i>=n){i=n;clearInterval(t)}b.textContent=Math.round(i)},30)}
+  const b=e.target.querySelector('[data-n]');if(b&&!b.done){b.done=1;const n=+b.dataset.n;
+    if(reduce){b.textContent=n}
+    else{let i=0;const t=setInterval(()=>{i+=Math.max(1,n/40);if(i>=n){i=n;clearInterval(t)}b.textContent=Math.round(i)},30)}}
   io.unobserve(e.target)}),{threshold:.2});
 document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 
