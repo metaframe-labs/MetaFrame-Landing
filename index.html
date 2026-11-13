@@ -12,7 +12,8 @@
 <link rel="apple-touch-icon" href="icons/MetaBox.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="cards.css">
-  <link rel="stylesheet" href="intel.css">
+<link rel="stylesheet" href="intel.css">
+<link rel="stylesheet" href="babel.css">
 </head>
 <body>
 <div id="boot"><pre id="bootlog"></pre></div>
@@ -64,8 +65,28 @@
 </section>
 <section id="products">
   <h2><small>03</small> The Cartridges</h2>
-  <p class="lead">Every product is a cartridge. Hover to inspect, click to flip.</p>
-  <div class="cards" id="cards"></div>
+  <p class="lead">Every product ships as a cartridge. Pull one off the rack &mdash; the deck slots it in and boots it for you.</p>
+  <div class="deck reveal" id="deck">
+    <div class="rack" id="rack"></div>
+    <div class="console" id="cunit">
+      <i class="screw s1"></i><i class="screw s2"></i><i class="screw s3"></i><i class="screw s4"></i>
+      <div class="bay">
+        <div class="slotcart" id="slotcart" hidden data-cursor="eject"></div>
+        <div class="slot"></div>
+      </div>
+      <div class="crt" id="crt">
+        <div class="scan"></div>
+        <div class="crtidle show" id="crtidle"><b>NO CARTRIDGE</b><span>insert one to boot &#9646;</span></div>
+        <div class="crtlog" id="crtlog" aria-hidden="true"></div>
+        <div class="crtinfo" id="crtinfo" role="status"></div>
+      </div>
+      <div class="chin">
+        <div class="leds"><i class="led pwr" title="power"></i><i class="led busy" title="busy"></i><i class="led ok" title="ready"></i></div>
+        <span class="brand">metaframe &middot; deck-01</span>
+        <span class="sn">7 carts &middot; sn-2026</span>
+      </div>
+    </div>
+  </div>
 </section>
 
   <section id="intel">
@@ -89,6 +110,44 @@
         </div>
       </div>
     </div>
+
+    <div class="stage stage-babel">
+      <div class="layer grid" data-z="0.012"></div>
+      <div class="layer" data-z="0.012"><canvas></canvas></div>
+      <div class="layer" data-z="0.03"><canvas></canvas></div>
+      <div class="layer" data-z="0.07"><canvas></canvas></div>
+      <div class="scan"></div><div class="vig"></div>
+      <div class="hud">
+        <div class="top"><span>// REPO-02 · I18NEXT-LOCAL-INFERENCE</span><span>Ollama &middot; 29 locales &middot; 0 cloud calls</span></div>
+        <div class="mid">
+          <div class="pitch">
+            <h3 class="ttl">One string, <em>29 faces.</em></h3>
+            <p class="sub"><b>i18next-local-inference</b> &mdash; an i18n dashboard that points local <b>Ollama</b> models at your locale files. One model fills every missing translation; a second model judges the suspicious ones: <i>cognate or forgotten?</i> Zero cloud, zero API keys, streamed over ndjson.</p>
+            <div class="gates">
+              <div class="gate">01<b>Local Ollama</b></div><div class="gate">02<b>Translator 12b</b></div><div class="gate">03<b>Judge 26b</b></div>
+              <div class="gate">04<b>29 locales</b></div><div class="gate">05<b>ndjson stream</b></div><div class="gate">06<b>Zero cloud</b></div>
+            </div>
+            <div class="cta"><a data-cursor="open" href="https://github.com/neurodivergent-dev/i18next-local-inference" target="_blank" rel="noopener">VIEW ON GITHUB &#8599;</a><code>simulation &middot; the real judge runs on your machine</code></div>
+          </div>
+          <div class="term babel-term">
+            <div class="bar"><i></i><i></i><i></i><span>babel://pipeline &middot; localhost:5960</span>
+              <span class="mleds"><span class="mled" id="bledT" title="translator gemma4:12b">12b<i></i></span><span class="mled j" id="bledJ" title="judge gemma4:26b">26b<i></i></span></span>
+            </div>
+            <div class="body">
+              <div class="chips">
+                <button type="button">Welcome back!</button><button type="button">Flashcards</button><button type="button">AI tutor</button><button type="button">Focus session complete</button><button type="button">WiFi</button>
+              </div>
+              <form id="babelForm"><span>&gt;</span><input id="babelInp" autocomplete="off" maxlength="24" placeholder="feed the judge a string…"><button>run</button></form>
+              <div class="gridwrap"><div class="tilegrid" id="babelTiles"></div></div>
+              <div class="bout" id="babelOut" aria-live="polite"></div>
+              <div class="bphases" id="babelPhases"><b>discover</b><b>translate</b><b>judge</b><b>verify</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="top bot"><span>translator &middot; gemma4:12b</span><span id="babelLang">locale: --</span><span>judge &middot; gemma4:26b</span></div>
+      </div>
+    </div>
+    <p class="note">Open source, Apache-2.0. This demo replays a scripted slice of the real pipeline &mdash; on your machine it runs fully local via Ollama, streaming over ndjson.</p>
   </section>
     <section id="principles">
   <h2><small>05</small> Operating principles</h2>
@@ -117,5 +176,6 @@
 <script src="phone.js"></script>
 <script src="cards.js"></script>
   <script src="intel.js"></script>
+  <script src="babel.js"></script>
 </body>
 </html>

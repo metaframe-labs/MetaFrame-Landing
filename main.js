@@ -42,7 +42,7 @@ function frame(){
 if(!window.THREE){addEventListener('resize',init);init();frame();}else cv.style.display='none';
 addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
 const cur=document.getElementById('cursor');
-document.addEventListener('pointerover',e=>cur.classList.toggle('big',!!e.target.closest('a,button,.card,input')));
+document.addEventListener('pointerover',e=>cur.classList.toggle('big',!!e.target.closest('a,button,.cart,input')));
 
 // ---------- reveal + counters ----------
 document.querySelectorAll('section h2,.stat,.lead,.term,.rules li,.big').forEach(e=>e.classList.add('reveal'));
@@ -51,27 +51,6 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return
   io.unobserve(e.target)}),{threshold:.2});
 document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
 
-
-// ---------- product cards ----------
-const prods=[
-  ['Meta Box','Create apps with AI','#27e39a','MetaBox','Describe an app or mini game, get it built. The flagship of the lab.'],
-  ['Neurodivergence','Consciousness','#e8e8e8','Neurodivergence','Exploring how different minds work and building for them.'],
-  ['Mindhouse','AI study companion','#5b7bff','Mindhouse','A study partner that adapts to how you learn.'],
-  ['Divergent AI','Think differently','#a84dff','Divergentai','An AI that embraces non-linear thinking.'],
-  ['FocusTabs','Stay in flow','#b06bff','FocusTabs','Tame your tabs, protect your attention.'],
-  ['Mindbook Lite','Lightweight notes','#27e39a','Mindbook-Lite','Fast, minimal, distraction-free notes.'],
-  ['Mindbook','Markdown cloud notes','#3d8bff','MindbookPro','Markdown notes that follow you across devices.']
-];
-const cards=document.getElementById('cards');
-prods.forEach((p,i)=>{
-  const c=document.createElement('div');c.className='card reveal';c.style.setProperty('--c',p[2]);
-  c.innerHTML=`<div class="in"><div class="ico"><img src="icons/${p[3]}.png" alt="${p[0]}" loading="lazy"></div><span class="id">MF-0${i+1}</span><h3>${p[0]}</h3><p>${p[1]}</p></div><div class="back"><b style="color:var(--fg);margin-bottom:8px">${p[0]}</b>${p[4]}</div>`;
-  c.onclick=()=>c.classList.toggle('flip');
-  c.onpointermove=e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`rotateY(${x*18}deg) rotateX(${-y*18}deg)`};
-  c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')});
-  c.onpointerleave=()=>c.style.transform='';
-  cards.append(c);io.observe(c);
-});
 
 // ---------- easter egg: Konami switches theme ----------
 const seq='ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba';let buf='';

@@ -1,71 +1,145 @@
-/* ---------- Cartridge cards: holo foil, depth layers, spring tilt ---------- */
-.cards{gap:28px;perspective:1200px;perspective-origin:50% 40%}
-.card{
-  --rx:0deg;--ry:0deg;--px:50%;--py:50%;--hi:0;
+/* ---------- Cartridge deck: rack, slot-in console, CRT boot ---------- */
+.deck{--c:#27e39a;margin-top:6px}
+
+/* --- the rack --- */
+.rack{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:13px;padding:30px 12px 22px}
+.rack::before{content:"";position:absolute;left:4%;right:4%;bottom:0;height:12px;border-radius:0 0 10px 10px;background:linear-gradient(180deg,#15151c,#0a0a0e);box-shadow:0 16px 26px -12px #000,inset 0 1px 0 rgba(255,255,255,.05)}
+.rack::after{content:"";position:absolute;left:0;right:0;bottom:11px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,178,30,.35) 30%,rgba(255,178,30,.35) 70%,transparent)}
+
+/* --- cartridge body (shared: rack / slot / flight) --- */
+.cbody{
+  --rx:0deg;--ry:0deg;--px:50%;--py:30%;--hi:0;
+  position:relative;width:112px;height:150px;border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;padding:10px 10px 26px;
+  background:radial-gradient(circle at 30% 0%,color-mix(in srgb,var(--c) 30%,transparent),transparent 62%),linear-gradient(160deg,#16161d,#0a0a0e 70%);
+  border:1px solid color-mix(in srgb,var(--c) 22%,#26262e);
+  box-shadow:0 18px 32px -16px #000c,inset 0 1px 0 rgba(255,255,255,.05);
   transform:rotateX(var(--rx)) rotateY(var(--ry));
-  transition:opacity .8s,translate .9s cubic-bezier(.2,.8,.2,1),scale .9s cubic-bezier(.2,.8,.2,1),box-shadow .4s;
-  border-radius:18px;will-change:transform;
+  transition:box-shadow .3s,translate .35s cubic-bezier(.2,.8,.2,1),opacity .4s,filter .4s;
 }
-/* entrance: cards fly in from depth, staggered */
-.card.reveal{opacity:0;translate:0 70px;scale:.88;transform:rotateX(var(--rx)) rotateY(var(--ry))}
-.card.reveal.in{opacity:1;translate:0 0;scale:1;transition-delay:var(--d,0s),var(--d,0s),var(--d,0s),0s}
-.card:hover{box-shadow:0 40px 90px -40px var(--c),0 0 0 1px color-mix(in srgb,var(--c) 40%,transparent)}
-
-/* faces */
-.card .in,.card .back{transform-style:preserve-3d;overflow:hidden;
-  background:
-    radial-gradient(circle at 30% 0%,color-mix(in srgb,var(--c) 28%,transparent),transparent 62%),
-    linear-gradient(160deg,#14141b,#09090d 70%)}
-.card .back{overflow:hidden}
-
-/* holographic foil: rainbow sheen that tracks the cursor */
-.card .in::before,.card .back::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
-  background:
-    repeating-linear-gradient(115deg,transparent 0 14px,rgba(255,255,255,.05) 14px 15px),
-    linear-gradient(115deg,transparent 20%,rgba(255,60,172,.5) 36%,rgba(80,170,255,.5) 46%,rgba(60,255,190,.5) 56%,rgba(255,220,80,.5) 66%,transparent 80%);
-  background-size:100% 100%,260% 260%;
-  background-position:0 0,calc(var(--px) * 1) calc(var(--py) * 1);
-  mix-blend-mode:color-dodge;opacity:calc(var(--hi) * .55);transition:opacity .35s;
+.cbody::before{ /* holographic foil tracking the cursor */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:repeating-linear-gradient(115deg,transparent 0 14px,rgba(255,255,255,.05) 14px 15px),linear-gradient(115deg,transparent 20%,rgba(255,60,172,.5) 36%,rgba(80,170,255,.5) 46%,rgba(60,255,190,.5) 56%,rgba(255,220,80,.5) 66%,transparent 80%);
+  background-size:100% 100%,260% 260%;background-position:0 0,var(--px) var(--py);
+  mix-blend-mode:color-dodge;opacity:calc(var(--hi)*.55);transition:opacity .35s;
 }
-/* moving specular glare */
-.card .in::after{z-index:4;background:radial-gradient(circle 220px at var(--px) var(--py),rgba(255,255,255,.22),transparent 70%)}
-
-/* depth: layers float above the card plane */
-.card .ico{transform:translateZ(60px);box-shadow:0 20px 40px -10px var(--c),0 0 40px -6px var(--c);transition:transform .4s cubic-bezier(.2,.8,.2,1);animation:icofloat 5s ease-in-out infinite;animation-delay:calc(var(--i,0) * -.7s)}
-.card:hover .ico{transform:translateZ(90px) scale(1.08)}
-.card h3{transform:translateZ(40px);letter-spacing:-.01em}
-.card p{transform:translateZ(24px)}
-.card .id{transform:translateZ(18px)}
-@keyframes icofloat{50%{translate:0 -6px}}
-
-/* animated light edge that sweeps around the card on hover */
-.card::before{
-  content:"";position:absolute;inset:-1px;border-radius:19px;padding:1px;pointer-events:none;z-index:-1;
-  background:conic-gradient(from var(--ang,0deg),transparent 0 60%,var(--c) 85%,#fff 92%,transparent);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
-  opacity:0;transition:opacity .4s;animation:spin 3s linear infinite;
+.cbody::after{ /* gold edge connector */
+  content:"";position:absolute;left:12px;right:12px;bottom:0;height:10px;
+  background:repeating-linear-gradient(90deg,#c9973f 0 3px,#0a0a0e 3px 6px);
+  -webkit-mask:linear-gradient(180deg,#000 60%,transparent);mask:linear-gradient(180deg,#000 60%,transparent);
 }
-.card:hover::before{opacity:1}
-@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
-@keyframes spin{to{--ang:360deg}}
+.notch{position:absolute;left:10px;right:10px;bottom:17px;height:8px;opacity:.5;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 2px,transparent 2px 7px)}
+.cico{width:34px;height:34px;border-radius:9px;object-fit:contain;padding:5px;background:color-mix(in srgb,var(--c) 16%,#0d0d12);border:1px solid color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 8px 20px -10px var(--c)}
+.cid{position:absolute;top:10px;right:10px;font:9px 'JetBrains Mono',monospace;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 85%,#fff);opacity:.9}
+.cname{margin-top:auto;font-size:.92rem;letter-spacing:-.01em;line-height:1.15}
+.cname.long{font-size:.76rem;letter-spacing:-.02em;margin-inline:-6px} /* long single-word titles get extra room */
+.ctag{font:9px 'JetBrains Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-top:3px}
 
-/* back side: spec sheet with barcode */
-.card .back{padding:26px 26px 64px;color:#bdbcb6;line-height:1.5}
-.card .back::after{
-  content:"";position:absolute;left:26px;right:26px;bottom:24px;height:26px;opacity:.55;
-  background:repeating-linear-gradient(90deg,var(--c) 0 2px,transparent 2px 5px,var(--c) 5px 6px,transparent 6px 11px,var(--c) 11px 14px,transparent 14px 16px);
-  -webkit-mask:linear-gradient(90deg,#000,transparent);mask:linear-gradient(90deg,#000,transparent);
+.cart{position:relative;background:none;border:0;padding:0;font:inherit;color:inherit;perspective:620px}
+.cart:hover .cbody{translate:0 -7px;box-shadow:0 28px 44px -18px #000d,0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent)}
+.cart.out{pointer-events:none}
+.cart.out .cbody{opacity:.14;filter:saturate(.3)}
+.cart.out::after{content:"IN DECK";position:absolute;inset:0;display:grid;place-items:center;font:9px 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--dim);border:1px dashed rgba(139,138,133,.4);border-radius:12px}
+
+/* entrance: cartridges pop onto the rack, staggered */
+.cart.reveal{opacity:0;translate:0 36px;scale:.9}
+.cart.reveal.in{opacity:1;translate:0 0;scale:1;transition:opacity .7s,translate .8s cubic-bezier(.2,.8,.2,1),scale .8s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s),var(--d,0s),var(--d,0s)}
+
+/* the cartridge in flight between rack and slot */
+.fly{position:fixed;z-index:150;pointer-events:none;transition:transform .5s cubic-bezier(.3,.75,.25,1)}
+.fly .cbody{width:100%;height:100%;transform:none;translate:none;box-shadow:0 44px 60px -22px #000e,0 0 44px -12px var(--c)}
+
+/* --- the console --- */
+.console{position:relative;margin-top:38px;border-radius:22px;border:1px solid #26262e;display:grid;grid-template-columns:290px 1fr;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),linear-gradient(180deg,#181821,#101016 55%,#0b0b10);
+  box-shadow:0 70px 130px -70px #000,0 30px 60px -40px #0009,inset 0 1px 0 rgba(255,255,255,.05),inset 0 -1px 0 rgba(0,0,0,.6);
+  transition:box-shadow .6s}
+.deck.ready .console{box-shadow:0 70px 130px -70px #000,0 0 120px -70px var(--c),inset 0 1px 0 rgba(255,255,255,.05)}
+.console.thud{animation:thud .3s ease-out}
+@keyframes thud{30%{transform:translateY(4px)}60%{transform:translateY(-2px)}}
+.screw{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a4a55,#17171d 70%);box-shadow:inset 0 0 2px #000,0 1px 0 rgba(255,255,255,.06)}
+.screw::before{content:"";position:absolute;left:1px;right:1px;top:50%;height:1px;background:rgba(0,0,0,.65);transform:rotate(40deg)}
+.screw.s1{top:12px;left:12px}.screw.s2{top:12px;right:12px}.screw.s3{bottom:12px;left:12px}.screw.s4{bottom:12px;right:12px}
+
+/* bay + cartridge slot */
+.bay{position:relative;min-height:360px;border-right:1px solid #1e1e26;display:flex;align-items:flex-end;justify-content:center;padding:26px 20px 64px}
+.slot{position:absolute;left:50%;translate:-50% 0;bottom:50px;width:198px;height:34px;border-radius:9px;z-index:3;background:linear-gradient(180deg,#050507,#101017 90%);box-shadow:inset 0 8px 14px #000c,inset 0 -2px 4px rgba(255,255,255,.04),0 1px 0 rgba(255,255,255,.05)}
+.slot::after{content:"";position:absolute;left:12px;right:12px;top:6px;height:9px;border-radius:5px;background:#000;box-shadow:inset 0 3px 6px #000}
+.slot::before{content:"";position:absolute;left:-9px;right:-9px;bottom:-6px;height:11px;border-radius:99px;background:linear-gradient(180deg,#24242e,#14141a);box-shadow:0 5px 12px -4px #000;z-index:4}
+.slotcart{position:absolute;left:50%;bottom:66px;translate:-50% 0;z-index:2;filter:drop-shadow(0 26px 30px rgba(0,0,0,.75))}
+.slotcart .cbody{width:168px;height:224px;padding:16px 16px 30px;border-radius:15px;transform:none;box-shadow:0 34px 60px -22px color-mix(in srgb,var(--c) 40%,#000b),inset 0 1px 0 rgba(255,255,255,.06)}
+.slotcart .cbody::before{opacity:.16;background-position:0 0,30% 40%}
+.slotcart .cico{width:58px;height:58px;border-radius:14px;padding:9px}
+.slotcart .cname{font-size:1.3rem}
+.slotcart .cname.long{font-size:1.1rem}
+.slotcart .ctag{font-size:9.5px}
+.slotcart .cid{top:16px;right:16px;font-size:10px}
+.slotcart.settle{animation:settle .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes settle{0%{translate:-50% -30px}55%{translate:-50% 7px}80%{translate:-50% -3px}100%{translate:-50% 0}}
+
+/* the CRT */
+.crt{position:relative;min-height:360px;margin:26px;border-radius:16px;overflow:hidden;border:1px solid #20202a;background:radial-gradient(120% 90% at 50% 0%,#0d0d13,#07070b 70%);box-shadow:inset 0 0 0 1px #0009,inset 0 14px 34px -18px #000d,0 0 70px -34px var(--c)}
+.scan{position:absolute;inset:0;pointer-events:none;z-index:6;background:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 3px)}
+.scan::after{content:"";position:absolute;left:0;right:0;top:-90px;height:90px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.05),transparent);animation:sweep 5s linear infinite}
+@keyframes sweep{to{transform:translateY(480px)}}
+.crt.flick{animation:crtflick .45s steps(1)}
+@keyframes crtflick{0%{filter:brightness(0)}18%{filter:brightness(1.7)}36%{filter:brightness(.2)}58%{filter:brightness(1.25)}100%{filter:brightness(1)}}
+.crtidle,.crtlog,.crtinfo{position:absolute;inset:0;padding:28px}
+.crtidle{display:flex;flex-direction:column;gap:10px;justify-content:center;align-items:center;color:var(--dim);opacity:0;pointer-events:none;transition:opacity .4s}
+.crtidle.show{opacity:1}
+.crtidle b{font:600 15px 'JetBrains Mono',monospace;letter-spacing:.32em}
+.crtidle span{font:10px 'JetBrains Mono',monospace;letter-spacing:.2em;color:color-mix(in srgb,var(--c) 75%,#fff);animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:.2}}
+.crtlog{font:12px/2 'JetBrains Mono',monospace;white-space:pre-wrap;color:color-mix(in srgb,var(--c) 80%,#cfcfc8);opacity:0;pointer-events:none;transition:opacity .25s}
+.crtlog.show{opacity:1}
+.crtinfo{display:flex;flex-direction:column;justify-content:flex-end;gap:14px;opacity:0;translate:0 14px;pointer-events:none;transition:opacity .5s,translate .6s cubic-bezier(.2,.8,.2,1)}
+.crtinfo.show{opacity:1;translate:0 0;pointer-events:auto}
+.ihead{display:flex;align-items:center;gap:16px}
+.icid{font:700 11px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#000;background:var(--c);padding:6px 10px;border-radius:8px;box-shadow:0 10px 26px -12px var(--c)}
+.crtinfo h3{font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.02em;line-height:1}
+.itag{display:block;font:11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--c);margin-top:5px}
+.idesc{color:#a7a6a0;max-width:56ch;line-height:1.55}
+.ispec{display:flex;gap:20px;font:10px 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.iacts{display:flex;align-items:center;gap:10px}
+.iacts button,.iacts a{font:600 11px 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border-radius:99px;padding:12px 18px;border:0;cursor:pointer;transition:transform .25s,box-shadow .25s}
+.iacts button{background:var(--c);color:#000;box-shadow:0 12px 30px -12px var(--c)}
+.iacts a{background:transparent;color:var(--c);border:1px solid var(--c)}
+.iacts button:hover,.iacts a:hover{transform:translateY(-2px)}
+.ibar{margin-left:auto;width:120px;height:22px;opacity:.5;background:repeating-linear-gradient(90deg,var(--c) 0 2px,transparent 2px 5px,var(--c) 5px 6px,transparent 6px 11px,var(--c) 11px 14px,transparent 14px 16px);-webkit-mask:linear-gradient(90deg,#000,transparent);mask:linear-gradient(90deg,#000,transparent)}
+
+/* chin: leds + branding */
+.chin{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 22px;border-top:1px solid #1e1e26;font:10px 'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+.leds{display:flex;gap:8px;align-items:center}
+.led{width:8px;height:8px;border-radius:50%;background:#2c2c34;box-shadow:inset 0 0 3px #000}
+.led.pwr{background:var(--gold);box-shadow:0 0 9px var(--gold)}
+.deck.busy .led.busy{background:#ffb21e;box-shadow:0 0 10px #ffb21e;animation:blink .26s steps(1) infinite}
+.deck.ready .led.ok{background:var(--c);box-shadow:0 0 10px var(--c)}
+
+.deck.busy .cart{pointer-events:none}
+
+/* responsive */
+@media(max-width:860px){
+  .console{grid-template-columns:1fr}
+  .bay{min-height:270px;border-right:0;border-bottom:1px solid #1e1e26;padding:22px 16px 58px}
+  .slot{width:164px;bottom:42px}
+  .slotcart{bottom:58px}
+  .slotcart .cbody{width:136px;height:182px;padding:13px 13px 28px}
+  .slotcart .cico{width:46px;height:46px;border-radius:12px;padding:7px}
+  .slotcart .cname{font-size:1.05rem}
+  .slotcart .cname.long{font-size:.9rem}
+  .crt{min-height:330px;margin:16px}
+  .crtidle,.crtlog,.crtinfo{padding:22px}
+  .rack{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding:22px 7vw 18px;scrollbar-width:none}
+  .rack::-webkit-scrollbar{display:none}
+  .cart{flex:0 0 auto;scroll-snap-align:center}
+  .ispec,.ibar{display:none}
 }
-
-@media (hover:none){.card .ico{animation:none}}
-@media (prefers-reduced-motion:reduce){.card .ico,.card::before{animation:none}.card.reveal{translate:0 0;scale:1}}
-
-/* back-face actions */
-.card .acts{position:absolute;left:26px;right:26px;bottom:62px;display:flex;gap:8px;flex-wrap:wrap;transform:translateZ(30px);z-index:5}
-.card .acts button,.card .acts a{font:600 10px 'JetBrains Mono',monospace;letter-spacing:.1em;text-decoration:none;color:#000;background:var(--c);border:0;border-radius:99px;padding:8px 13px;transition:transform .25s,box-shadow .25s}
-.card .acts a{background:transparent;color:var(--c);border:1px solid var(--c)}
-.card .acts button:hover,.card .acts a:hover{transform:translateY(-2px);box-shadow:0 8px 24px -8px var(--c)}
+@media (prefers-reduced-motion:reduce){
+  .cart.reveal{opacity:1;translate:none;scale:none}
+  .scan::after,.crtidle span{animation:none}
+  .slotcart.settle,.console.thud,.crt.flick{animation:none}
+  .cbody{transition:none}
+}
 
 /* 3D phone stage */
 html.stage-open,html.stage-open body{overflow:hidden}

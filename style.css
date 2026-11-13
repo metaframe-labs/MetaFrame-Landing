@@ -3,7 +3,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font-family:'Space Grotesk',system-ui,sans-serif;overflow-x:hidden;line-height:1.5}
 body.em{--gold:#27e39a;--line:rgba(39,227,154,.25)}
-@media(pointer:fine){body{cursor:none}a,button,input,.card{cursor:none}}
+@media(pointer:fine){body{cursor:none}a,button,input,.cart{cursor:none}}
 #field{position:fixed;inset:0;z-index:0}
 #cursor{position:fixed;width:18px;height:18px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:99;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:difference}
 #cursor.big{width:54px;height:54px;background:rgba(255,178,30,.15)}
@@ -56,15 +56,6 @@ form span{color:var(--gold)}
 input{flex:1;background:none;border:0;outline:0;color:var(--fg);font:inherit}
 form button{background:var(--gold);border:0;border-radius:6px;padding:6px 16px;font:600 12px inherit;font-family:inherit;color:#000}
 .note{color:var(--dim);font-size:.85rem;margin-top:14px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;perspective:1000px}
-.card{height:300px;position:relative;transform-style:preserve-3d;transition:transform .15s ease-out}
-.card .in,.card .back{position:absolute;inset:0;border-radius:18px;padding:26px;backface-visibility:hidden;border:1px solid var(--line);background:#0c0c10;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .6s}
-.card .in{background:radial-gradient(circle at 30% 0%,var(--c) -80%,#0c0c10 60%)}
-.card .back{transform:rotateY(180deg);justify-content:center;color:var(--dim);font-size:.95rem}
-.card.flip .in{transform:rotateY(180deg)}.card.flip .back{transform:rotateY(360deg)}
-.card .ico{position:absolute;top:24px;left:26px;width:64px;height:64px;border-radius:16px;background:var(--c);display:grid;place-items:center;font-size:1.8rem;font-weight:700;color:#000;box-shadow:0 0 40px -6px var(--c)}
-.card h3{font-size:1.3rem}.card p{color:var(--dim);font-size:.85rem;margin-top:4px}
-.card .id{position:absolute;top:26px;right:26px;font:11px 'JetBrains Mono',monospace;color:var(--dim)}
 .rules{list-style:none;counter-reset:r}
 .rules li{counter-increment:r;border-top:1px solid var(--line);padding:26px 0 26px 70px;position:relative;font-size:1.2rem;color:var(--dim);transition:padding .3s}
 .rules li:hover{padding-left:90px}

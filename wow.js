@@ -170,7 +170,7 @@ window.__snd=snd;
 const btn=document.createElement('button');btn.id='snd';btn.setAttribute('aria-label','toggle sound');
 btn.innerHTML='<span class="eq"><i></i><i></i><i></i><i></i></span><b>SOUND OFF</b>';
 btn.onclick=()=>snd.set(!snd.on);document.body.append(btn);
-document.addEventListener('pointerover',e=>{if(snd.on&&e.target.closest('a,button:not(#snd),.card,.pills span,input'))snd.hover()});
+document.addEventListener('pointerover',e=>{if(snd.on&&e.target.closest('a,button:not(#snd),.cart,.pills span,input'))snd.hover()});
 (function loop(){
   if(snd.on&&mf){
     snd.windG.gain.value=lerp(snd.windG.gain.value,Math.min(.04,Math.abs(mf.vel)*.001),.15);
@@ -204,8 +204,8 @@ document.querySelectorAll('.links a').forEach(a=>{
 // ===== 6. Contextual cursor label =====
 if(fine){
   const lab=document.createElement('div');lab.id='curlabel';document.body.append(lab);
-  document.querySelectorAll('.card').forEach(el=>el.dataset.cursor='flip');
-  new MutationObserver(()=>document.querySelectorAll('.card:not([data-cursor])').forEach(el=>el.dataset.cursor='flip')).observe(document.getElementById('cards'),{childList:true});
+  document.querySelectorAll('.cart').forEach(el=>el.dataset.cursor='insert');
+  new MutationObserver(()=>document.querySelectorAll('.cart:not([data-cursor])').forEach(el=>el.dataset.cursor='insert')).observe(document.getElementById('rack'),{childList:true});
   const mail=document.getElementById('mail');if(mail)mail.dataset.cursor='say hi';
   document.querySelectorAll('.chips button,form button').forEach(el=>el.dataset.cursor='run');
   let x=0,y=0,tx=0,ty=0;
