@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="cards.css">
 <link rel="stylesheet" href="intel.css">
 <link rel="stylesheet" href="babel.css">
+<link rel="stylesheet" href="aes.css">
 </head>
 <body>
 <div id="boot"><pre id="bootlog"></pre></div>
@@ -148,6 +149,45 @@
       </div>
     </div>
     <p class="note">Open source, Apache-2.0. This demo replays a scripted slice of the real pipeline &mdash; on your machine it runs fully local via Ollama, streaming over ndjson.</p>
+
+    <div class="stage stage-aes">
+      <div class="layer grid" data-z="0.012"></div>
+      <div class="layer" data-z="0.02"><canvas></canvas></div>
+      <div class="scan"></div><div class="vig"></div>
+      <div class="hud">
+        <div class="top"><span>// REPO-03 · AUTONOMOUS-ENGINEERING-SYSTEM</span><span>Bun &middot; Tauri &middot; MCP stdio &middot; MIT</span></div>
+        <div class="mid">
+          <div class="pitch">
+            <h3 class="ttl">Three agents. <em>Six gates.</em></h3>
+            <p class="sub"><b>autonomousengineeringsystem</b> &mdash; the closed loop. Orion drafts the PRD, Daedalus locks the ADR, Vulcan plans the work, the executor writes the code &mdash; and <i>Aegis</i>, six compiler-grounded gates, refuses every commit until it's green. Gate fails? The loop heals itself and ships anyway. No context dumping: AST receipts, zero token waste.</p>
+            <div class="gates">
+              <div class="gate">01<b>Zero-token waste</b></div><div class="gate">02<b>Compiler-grounded</b></div><div class="gate">03<b>Self-healing loop</b></div>
+              <div class="gate">04<b>Blast radius</b></div><div class="gate">05<b>Local Ollama</b></div><div class="gate">06<b>MCP stdio</b></div>
+            </div>
+            <div class="cta"><a data-cursor="open" href="https://github.com/neurodivergent-dev/autonomousengineeringsystem" target="_blank" rel="noopener">VIEW ON GITHUB &#8599;</a><code>bun run impact -t ./your-repo &middot; 643 files · 693ms</code></div>
+          </div>
+          <div class="term aes-term">
+            <div class="bar"><i></i><i></i><i></i><span>aes://mission-control &middot; bun</span>
+              <span class="mleds"><span class="mled" id="aledOri" title="orion · PRD">ORI<i></i></span><span class="mled j" id="aledDae" title="daedalus · ADR">DAE<i></i></span><span class="mled" id="aledVul" title="vulcan · plan">VUL<i></i></span><span class="mled j" id="aledAeg" title="aegis · gates">AEG<i></i></span></span>
+            </div>
+            <div class="body">
+              <div class="chips">
+                <button type="button">dark mode toggle</button><button type="button">streak widget</button><button type="button">i18n loader refactor</button>
+              </div>
+              <form id="aesForm"><span>&gt;</span><input id="aesInp" autocomplete="off" maxlength="32" placeholder="assign a mission…"><button>launch</button></form>
+              <div class="alog" id="aesLog" aria-live="polite"></div>
+              <div class="aegis">
+                <div class="g">01<b>TSC</b></div><div class="g">02<b>BLAST</b></div><div class="g">03<b>THEME</b></div>
+                <div class="g">04<b>EMOJI</b></div><div class="g">05<b>I18N</b></div><div class="g">06<b>AST</b></div>
+              </div>
+              <div class="aphases" id="aesPhases"><b>index</b><b>crew</b><b>build</b><b>gates</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="top bot"><span>orion &middot; PRD</span><span>daedalus &middot; ADR</span><span>vulcan &middot; plan</span></div>
+      </div>
+    </div>
+    <p class="note">MIT. The mission above is a scripted replay &mdash; on your machine the gates run for real over the TypeScript Compiler API, self-healing included.</p>
   </section>
     <section id="principles">
   <h2><small>05</small> Operating principles</h2>
@@ -177,5 +217,6 @@
 <script src="cards.js"></script>
   <script src="intel.js"></script>
   <script src="babel.js"></script>
+  <script src="aes.js"></script>
 </body>
 </html>

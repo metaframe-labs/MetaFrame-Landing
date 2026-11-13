@@ -1,0 +1,57 @@
+/* ---------- autonomousengineeringsystem showcase: mission control + blast radar ---------- */
+#intel .stage-aes{height:auto;min-height:0;margin-top:28px}
+#intel .stage-aes .hud{position:relative;inset:auto;gap:clamp(20px,3vw,34px)}
+#intel .stage-aes .mid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(20px,3vw,44px);align-items:start}
+#intel .stage-aes .ttl{font-size:clamp(1.7rem,3.2vw,3rem)}
+#intel .stage-aes .sub b{color:var(--gold);font-weight:600}
+#intel .stage-aes .sub i{color:var(--em);font-style:normal}
+#intel .stage-aes .gates{grid-template-columns:repeat(3,1fr)}
+#intel .stage-aes .bot{color:var(--dim)}
+
+/* mission terminal */
+#intel .aes-term{box-shadow:0 0 90px -30px rgba(255,178,30,.5)}
+#intel .aes-term .body{min-height:0;display:flex;flex-direction:column;gap:12px}
+#intel #aesForm{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 12px}
+
+/* agent log */
+#intel .alog{font:12px 'JetBrains Mono',monospace;color:#b9f5d9;min-height:196px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;overflow:hidden}
+#intel .ln{white-space:pre-wrap;animation:lnin .25s both}
+@keyframes lnin{from{opacity:0;transform:translateY(5px)}}
+#intel .ln .who{color:var(--em);font-weight:600}
+#intel .ln.w-dae .who{color:var(--gold)}
+#intel .ln.w-vul .who{color:#5b7bff}
+#intel .ln.w-exec .who{color:var(--fg)}
+#intel .ln.bad{color:#ff6b87}
+#intel .ln.bad .who{color:#ff3d6e}
+#intel .ln.heal{color:var(--gold)}
+#intel .ln.heal .who{color:var(--gold)}
+#intel .ln.ok{color:var(--em);font-weight:600}
+#intel .ln.dim{color:var(--dim)}
+
+/* aegis gate strip */
+#intel .aegis{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+#intel .aegis .g{position:relative;font:10px 'JetBrains Mono',monospace;letter-spacing:.06em;padding:7px 6px 8px;border:1px solid var(--line);border-radius:6px;background:rgba(7,7,10,.72);color:var(--dim);text-align:center;transition:border-color .3s,color .3s,background .3s;overflow:hidden}
+#intel .aegis .g b{display:block;margin-top:2px;font-weight:500;color:var(--fg);transition:color .3s}
+#intel .aegis .g.run{border-color:var(--gold);color:var(--gold);animation:grun .5s infinite alternate}
+#intel .aegis .g.run b{color:var(--gold)}
+@keyframes grun{to{box-shadow:0 0 16px -5px var(--gold)}}
+#intel .aegis .g.pass{border-color:var(--em);color:var(--em);background:rgba(39,227,154,.06)}
+#intel .aegis .g.pass b{color:var(--em)}
+#intel .aegis .g.pass::after,#intel .aegis .g.fail::after{position:absolute;right:4px;top:3px;font-size:8px;letter-spacing:.1em}
+#intel .aegis .g.pass::after{content:"PASS";color:var(--em)}
+#intel .aegis .g.fail{border-color:#ff3d6e;color:#ff3d6e;background:rgba(255,61,110,.08);animation:gshake .4s}
+#intel .aegis .g.fail b{color:#ff3d6e}
+#intel .aegis .g.fail::after{content:"FAIL";color:#ff3d6e}
+@keyframes gshake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+
+/* phase stepper */
+#intel .aphases{display:flex;gap:6px;flex-wrap:wrap}
+#intel .aphases b{font:10px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;padding:4px 9px;border-radius:4px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.4);transition:.3s}
+#intel .aphases b.on{background:var(--gold);color:#000}
+#intel .aphases b.done{color:var(--gold)}
+
+@media(max-width:900px){#intel .stage-aes .mid{grid-template-columns:1fr}}
+@media(max-width:560px){#intel .stage-aes .gates{grid-template-columns:repeat(2,1fr)}#intel .aegis{grid-template-columns:repeat(3,1fr)}}
+@media(prefers-reduced-motion:reduce){
+  #intel .ln,#intel .aegis .g.run,#intel .aegis .g.fail{animation:none}
+}
