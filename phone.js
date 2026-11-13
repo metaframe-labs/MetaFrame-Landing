@@ -2,7 +2,7 @@
 (function(){
 if(!window.THREE)return;
 let stage,canvas,renderer,scene,camera,phone,screenMat,glareTex,ring,light,info,raf=0,open=false;
-let rotY=0,rotX=0,vY=0,drag=false,lx=0,ly=0,t0=0,mx=0,my=0,fr=0,baseY=0;
+let rotY=0,rotX=0,vY=0,drag=false,lx=0,ly=0,t0=0,mx=0,my=0,fr=0,baseY=0,size;
 let sCv,sCtx,sTex,iconImg=null,backMat,bump;
 const SW=512,SH=1088;
 
@@ -186,16 +186,19 @@ function build(){
   const rg=new THREE.BufferGeometry();rg.setAttribute('position',new THREE.BufferAttribute(p,3));
   ring=new THREE.Points(rg,new THREE.PointsMaterial({size:.035,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(ring);
 
-  const size=()=>{const w=innerWidth,h=innerHeight,m=w<800;renderer.setSize(w,h,false);camera.aspect=w/h;
-    camera.position.set(0,0,m?13.5:10.5);camera.lookAt(0,0,0);camera.updateProjectionMatrix();
+  size=()=>{const w=innerWidth,h=innerHeight,m=w<800;renderer.setSize(w,h,false);camera.aspect=w/h;
+    const z=m?15.2:10.5;
+    camera.position.set(0,0,z);camera.lookAt(0,0,0);camera.updateProjectionMatrix();
     // mobile: the info panel sits at the bottom, lift the phone so it never covers the text
     baseY=0;
     if(m&&stage){
-      const z=13.5,visH=2*z*Math.tan(camera.fov*Math.PI/360);
+      const visH=2*z*Math.tan(camera.fov*Math.PI/360);
       const pr=stage.querySelector('.panel').getBoundingClientRect();
-      const free=(h-pr.top)/h;                       // screen fraction free above the panel
-      const half=2.4/visH;                            // phone half-height as screen fraction
-      baseY=clamp((free+.05+half-.5)*visH,0,Math.max(0,visH/2-2.6));
+      // Panelin üstünde kalan gerçek boşluk oranı: pr.top / h
+      const freeRatio=pr.top>0?pr.top/h:0.62;
+      // Telefonun merkezini boş alanın tam ortasına hizala
+      const targetCenterRatio=freeRatio*0.48;
+      baseY=clamp((0.5-targetCenterRatio)*visH,0,visH/2-2.4);
     }};
   addEventListener('resize',size);size();
 
@@ -243,6 +246,7 @@ function show(i){
   stage.querySelector('.play').href=i.url;
   rotY=0;rotX=0;vY=0;t0=performance.now();open=true;
   document.documentElement.classList.add('stage-open');stage.classList.add('open');
+  size(); // Panel görünür olduktan hemen sonra gerçek pr.top değerini ölç
   const s=window.__snd;if(s&&s.on){s.tone(140,.6,'sawtooth',.06);s.tone(520,.5,'sine',.06,.12);s.tone(1040,.6,'sine',.04,.25)}
   cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
 }
