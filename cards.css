@@ -31,6 +31,7 @@
 .notch{position:absolute;left:10px;right:10px;bottom:17px;height:8px;opacity:.5;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 2px,transparent 2px 7px)}
 .cico{width:34px;height:34px;border-radius:9px;object-fit:contain;padding:5px;background:color-mix(in srgb,var(--c) 16%,#0d0d12);border:1px solid color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 8px 20px -10px var(--c)}
 .cid{position:absolute;top:10px;right:10px;font:9px 'JetBrains Mono',monospace;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 85%,#fff);opacity:.9}
+.csoon{position:absolute;top:10px;left:50px;font:700 8.5px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#000;background:var(--c);padding:2px 5px;border-radius:4px;box-shadow:0 0 10px var(--c)}
 .cname{margin-top:auto;font-size:.92rem;letter-spacing:-.01em;line-height:1.15}
 .cname.long{font-size:.76rem;letter-spacing:-.02em;margin-inline:-6px} /* long single-word titles get extra room */
 .ctag{font:9px 'JetBrains Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-top:3px}
@@ -74,6 +75,7 @@
 .slotcart .cname.long{font-size:1.1rem}
 .slotcart .ctag{font-size:9.5px}
 .slotcart .cid{top:16px;right:16px;font-size:10px}
+.slotcart .csoon{top:16px;left:82px;font-size:10px;padding:3px 7px}
 .slotcart.settle{animation:settle .5s cubic-bezier(.2,.8,.2,1)}
 @keyframes settle{0%{translate:-50% -30px}55%{translate:-50% 7px}80%{translate:-50% -3px}100%{translate:-50% 0}}
 
