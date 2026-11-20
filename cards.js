@@ -14,7 +14,7 @@ const PRODS=[
   ['FocusTabs','Stay in flow','#b06bff','FocusTabs','focustabs','Tame your tabs, protect your attention.','https://play.google.com/store/apps/details?id=com.melihcandemir.focustabs','live'],
   ['Mindbook Lite','Lightweight notes','#27e39a','Mindbook-Lite','mindbooklite','Fast, minimal, distraction-free notes.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook.free','live'],
   ['Mindbook','Markdown cloud notes','#3d8bff','MindbookPro','mindbook','Markdown notes that follow you across devices.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook','live'],
-  ['CyberDeck OS','Cyberpunk HUD','#00f0ff','CyberDeck','cyberdeck','Modular cyberpunk Android desktop with 60FPS WebGL shaders, live telemetry, procedural audio and autonomous AI console.','https://github.com/neurodivergent-dev/cyberdeck-launcher','coming soon']
+  ['CyberDeck OS','First Programmable Launcher','#00f0ff','CyberDeck','cyberdeck','The first mobile programmable launcher — live TSX/XML widget studio, autonomous coding agent, 60FPS WebGL hyper-shaders, terminal telemetry and procedural synth.','https://github.com/neurodivergent-dev/cyberdeck-launcher','coming soon']
 ].map((p,i)=>({name:p[0],tag:p[1],color:p[2],icon:p[3],slug:p[4],desc:p[5],url:p[6],status:p[7]||'live',i}));
 
 // one cartridge face, reused by the rack, the slot and the flight clone
