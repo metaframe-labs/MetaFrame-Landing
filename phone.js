@@ -89,15 +89,16 @@ function cyberdeck(c,i,t){
   T(c,'root@cyberdeck:~$ neofetch',56,305,20,col,'700','left','"JetBrains Mono",monospace');
 
   const ramP=clamp(0.45+Math.sin(t*1.5)*0.15);
-  card(c,56,330,195,110,16,'#121622');
-  T(c,'RAM USAGE',72,360,13,'#8a90a4','600','left','"JetBrains Mono",monospace');
-  T(c,'3.8 / 8.0 GB',72,392,20,'#ffffff','700','left','"Space Grotesk",sans-serif');
-  arcRing(c,205,385,22,ramP,col,6,'rgba(255,255,255,0.08)');
+  card(c,56,330,193,110,16,'#121622');
+  T(c,'RAM USAGE',72,358,12,'#8a90a4','600','left','"JetBrains Mono",monospace');
+  T(c,'3.8 GB',72,390,22,'#ffffff','700','left','"Space Grotesk",sans-serif');
+  T(c,'/ 8.0 GB',72,414,12,'#8a90a4','600','left','"JetBrains Mono",monospace');
+  arcRing(c,212,386,20,ramP,col,5,'rgba(255,255,255,0.08)');
 
-  card(c,265,330,195,110,16,'#121622');
-  T(c,'LIVE SHADER',281,360,13,'#8a90a4','600','left','"JetBrains Mono",monospace');
-  T(c,'60.0 FPS',281,392,20,'#32D74B','700','left','"Space Grotesk",sans-serif');
-  T(c,'HYPER-VORTEX',281,422,12,'#FCEE0A','600','left','"JetBrains Mono",monospace');
+  card(c,263,330,193,110,16,'#121622');
+  T(c,'LIVE SHADER',279,358,12,'#8a90a4','600','left','"JetBrains Mono",monospace');
+  T(c,'60.0 FPS',279,390,22,'#32D74B','700','left','"Space Grotesk",sans-serif');
+  T(c,'HYPER-VORTEX',279,416,12,'#FCEE0A','600','left','"JetBrains Mono",monospace');
 
   card(c,56,460,400,160,18,'#121622');
   T(c,'// PROCEDURAL SYNTH ENGINE',72,490,13,col,'700','left','"JetBrains Mono",monospace');
@@ -112,8 +113,8 @@ function cyberdeck(c,i,t){
 
   card(c,56,640,400,180,18,'#121622');
   T(c,'// AUTONOMOUS AGENT ACTIVE',72,672,13,'#32D74B','700','left','"JetBrains Mono",monospace');
-  const agentMsg=typed('Deploying hyper-shader live wallpaper...',P,18);
-  T(c,'> '+agentMsg+(Math.floor(t*3)%2?'_':''),72,710,16,'#ffffff','500','left','"JetBrains Mono",monospace');
+  const agentMsg=typed('Deploying hyper-shader wallpaper...',P,18);
+  T(c,'> '+agentMsg+(Math.floor(t*3)%2?'_':''),72,710,13.5,'#ffffff','500','left','"JetBrains Mono",monospace');
   T(c,'Tool: applyShaderAsLiveWallpaper',72,750,13,col,'600','left','"JetBrains Mono",monospace');
   T(c,'Status: 6 gates verified [100% OK]',72,785,12,'#8a90a4','500','left','"JetBrains Mono",monospace');
 
