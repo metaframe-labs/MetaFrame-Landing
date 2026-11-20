@@ -14,7 +14,7 @@ const PRODS=[
   ['FocusTabs','Stay in flow','#b06bff','FocusTabs','focustabs','Tame your tabs, protect your attention.','https://play.google.com/store/apps/details?id=com.melihcandemir.focustabs','live'],
   ['Mindbook Lite','Lightweight notes','#27e39a','Mindbook-Lite','mindbooklite','Fast, minimal, distraction-free notes.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook.free','live'],
   ['Mindbook','Markdown cloud notes','#3d8bff','MindbookPro','mindbook','Markdown notes that follow you across devices.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook','live'],
-  ['CyberDeck OS','First Programmable Launcher','#00f0ff','CyberDeck','cyberdeck','The first mobile programmable launcher — live TSX/XML widget studio, autonomous coding agent, 60FPS WebGL hyper-shaders, terminal telemetry and procedural synth.','https://github.com/neurodivergent-dev/cyberdeck-launcher','coming soon']
+  ['CyberDeck OS','First Programmable Launcher','#00f0ff','CyberDeck','cyberdeck','The first mobile programmable launcher — live TSX/XML widget studio, autonomous coding agent, 60FPS WebGL hyper-shaders, terminal telemetry and procedural synth.','','coming soon']
 ].map((p,i)=>({name:p[0],tag:p[1],color:p[2],icon:p[3],slug:p[4],desc:p[5],url:p[6],status:p[7]||'live',i}));
 
 // one cartridge face, reused by the rack, the slot and the flight clone
@@ -113,16 +113,17 @@ function showInfo(p){
   crtlog.classList.remove('show');
   const isSoon=p.status==='coming soon';
   const ver=isSoon?'dev-preview':'1.0';
-  const actLink=isSoon
-    ? `<a data-cursor="open" href="${p.url}" target="_blank" rel="noopener">github / preview &#8599;</a>`
+  const specMiddle=isSoon?'license · closed source':`ver · ${ver}`;
+  const actBtn=isSoon
+    ? `<span class="csoon-act">closed source · coming soon</span>`
     : `<a data-cursor="open" href="${p.url}" target="_blank" rel="noopener">google play &#8599;</a>`;
   crtinfo.innerHTML=`
     <div class="ihead"><span class="icid">MF-0${p.i+1}</span><div><h3>${p.name}</h3><span class="itag">${p.tag}</span></div></div>
     <p class="idesc">${p.desc}</p>
-    <div class="ispec"><span>platform · android</span><span>ver · ${ver}</span><span>status · ${p.status}</span></div>
+    <div class="ispec"><span>platform · android</span><span>${specMiddle}</span><span>status · ${p.status}</span></div>
     <div class="iacts">
       <button type="button" class="a3d" data-cursor="open">view in 3d</button>
-      ${actLink}
+      ${actBtn}
       <span class="ibar"></span>
     </div>`;
   crtinfo.querySelector('.a3d').onclick=e=>{e.stopPropagation();window.__open3D&&window.__open3D(infoObj(p))};

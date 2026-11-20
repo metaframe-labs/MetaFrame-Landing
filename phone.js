@@ -288,7 +288,16 @@ function show(i){
   stage.style.setProperty('--c',i.color);
   stage.querySelector('.mid').textContent=i.id;stage.querySelector('h3').textContent=i.name;
   stage.querySelector('em').textContent=i.tag;stage.querySelector('p').textContent=i.desc;
-  stage.querySelector('.play').href=i.url;
+  const play=stage.querySelector('.play');
+  if(i.status==='coming soon'||!i.url){
+    play.textContent='COMING SOON';
+    play.removeAttribute('href');
+    play.classList.add('soon');
+  }else{
+    play.textContent='GOOGLE PLAY ↗';
+    play.href=i.url;
+    play.classList.remove('soon');
+  }
   rotY=0;rotX=0;vY=0;t0=performance.now();open=true;
   document.documentElement.classList.add('stage-open');stage.classList.add('open');
   size(); // Panel görünür olduktan hemen sonra gerçek pr.top değerini ölç
