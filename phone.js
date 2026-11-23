@@ -79,9 +79,61 @@ const UI=[
   },
   // 5 Mindbook Lite / 6 Mindbook: notes
   (c,i,t)=>note(c,i,t,false),(c,i,t)=>note(c,i,t,true),
-  // 7 CyberDeck OS: cyberpunk HUD, live telemetry, oscilloscope, agent console
+  // 7 RetroDeck OS: Nokia 3310 LCD OS, 100-in-1 retro console, snake & ringtones
+  (c,i,t)=>retrodeck(c,i,t),
+  // 8 CyberDeck OS: cyberpunk HUD, live telemetry, oscilloscope, agent console
   (c,i,t)=>cyberdeck(c,i,t)
 ];
+function retrodeck(c,i,t){
+  const col='#94B07C',pixelOn='#172616',P=t%10;
+  // Authentic Nokia 3310 LCD Screen Frame
+  c.fillStyle='#090d0b';rrect(c,36,260,440,710,28);c.fill();
+  c.lineWidth=2;c.strokeStyle='rgba(148,176,124,0.4)';c.stroke();
+  
+  // LCD Background Plate
+  card(c,56,290,400,260,16,'#94B07C');
+  // Battery & Signal Indicators
+  T(c,'Ylll',72,320,16,pixelOn,'700','left','"JetBrains Mono",monospace');
+  T(c,'NOKIA',256,322,18,pixelOn,'800','center','"JetBrains Mono",monospace');
+  T(c,'[===]',440,320,15,pixelOn,'700','right','"JetBrains Mono",monospace');
+  
+  // RetroDeck OS App Display (Snake game preview on LCD)
+  T(c,'1. SNAKE DX',256,370,22,pixelOn,'800','center','"Space Grotesk",sans-serif');
+  T(c,'SCORE: '+(Math.floor(t*12)%990),256,402,17,pixelOn,'600','center','"JetBrains Mono",monospace');
+  
+  // Snake Pixel Art on LCD
+  c.fillStyle=pixelOn;
+  for(let s=0;s<6;s++){
+    const sx=190+s*18;
+    const sy=435+Math.sin(s*0.8+t*4)*12;
+    rrect(c,sx,sy,14,14,3);c.fill();
+  }
+  // Food dot
+  rrect(c,315,435,12,12,3);c.fill();
+  T(c,'[ SELECT ]',256,520,16,pixelOn,'700','center','"JetBrains Mono",monospace');
+
+  // Specs & Live Features Card
+  card(c,56,575,400,180,18,'#121815');
+  T(c,'// RETRODECK OS v1.2',72,608,13,'#94B07C','700','left','"JetBrains Mono",monospace');
+  T(c,'100-in-1 60 FPS Pocket Console',72,642,16,'#ffffff','700','left','"Space Grotesk",sans-serif');
+  T(c,'9-Provider BYOK AI Client (Monochrome LCD)',72,674,12.5,'#a3b899','500','left','"JetBrains Mono",monospace');
+  T(c,'16 Synthesized Nokia 3310 Ringtones',72,702,12.5,'#a3b899','500','left','"JetBrains Mono",monospace');
+  T(c,'Live WAP 1.1 Web Browser Engine',72,730,12.5,'#a3b899','500','left','"JetBrains Mono",monospace');
+
+  // Hardware Status Tags
+  card(c,56,775,400,90,18,'#121815');
+  T(c,'CORE SPECS',72,805,12,'#7c8c74','700','left','"JetBrains Mono",monospace');
+  ['60 FPS','NOKIA 3310','BYOK AI','100 CARTS'].forEach((tag,idx)=>{
+    const bx=72+idx*96;
+    c.fillStyle='rgba(148,176,124,0.15)';
+    rrect(c,bx,820,86,34,10);c.fill();
+    T(c,tag,bx+43,842,11,'#94B07C','700','center','"JetBrains Mono",monospace');
+  });
+
+  // Action Buttons
+  card(c,56,880,400,70,18,'rgba(148,176,124,0.12)');
+  T(c,'[A] BOOT CONSOLE',256,922,15,'#94B07C','700','center','"JetBrains Mono",monospace');
+}
 function cyberdeck(c,i,t){
   const col=i.color||'#00f0ff',P=t%10;
   c.fillStyle='#090b10';rrect(c,36,260,440,710,28);c.fill();

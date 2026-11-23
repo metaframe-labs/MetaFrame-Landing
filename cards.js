@@ -14,6 +14,7 @@ const PRODS=[
   ['FocusTabs','Stay in flow','#b06bff','FocusTabs','focustabs','Tame your tabs, protect your attention.','https://play.google.com/store/apps/details?id=com.melihcandemir.focustabs','live'],
   ['Mindbook Lite','Lightweight notes','#27e39a','Mindbook-Lite','mindbooklite','Fast, minimal, distraction-free notes.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook.free','live'],
   ['Mindbook','Markdown cloud notes','#3d8bff','MindbookPro','mindbook','Markdown notes that follow you across devices.','https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook','live'],
+  ['RetroDeck OS','100-in-1 Retro Console & OS','#94B07C','RetroDeck','retrodeck','Authentic Nokia 3310 OS firmware, 100-in-1 60FPS retro arcade cartridges, 9-provider BYOK AI, live WAP browser and real-time piezo ringtone synthesizer.','https://github.com/neurodivergent-dev/retrodeck-arcade','live'],
   ['CyberDeck OS','First Programmable Launcher','#00f0ff','CyberDeck','cyberdeck','The first mobile programmable launcher — live TSX/XML widget studio, autonomous coding agent, 60FPS WebGL hyper-shaders, terminal telemetry and procedural synth.','','coming soon']
 ].map((p,i)=>({name:p[0],tag:p[1],color:p[2],icon:p[3],slug:p[4],desc:p[5],url:p[6],status:p[7]||'live',i}));
 
