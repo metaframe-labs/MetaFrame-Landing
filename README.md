@@ -45,7 +45,7 @@ Each cartridge on the rack boots inside the CRT unit (`cards.js`), includes sema
 | **MF-06** | **Mindbook Lite** | Lightweight notes | [Google Play](https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook.free) (`live`) | Fast typed quick-notes & offline badge |
 | **MF-07** | **Mindbook** | Markdown cloud notes | [Google Play](https://play.google.com/store/apps/details?id=com.melihcandemir.mindbook) (`live`) | Typed Markdown note with code block & cloud sync indicator |
 | **MF-08** | **RetroDeck OS** | 100-in-1 Retro Console & OS | [GitHub](https://github.com/neurodivergent-dev/retrodeck-arcade) (`live`) | Nokia 3310 monochrome LCD (`SNAKE DX`, signal/battery, 9-provider AI, WAP 1.1, synth specs) |
-| **MF-09** | **CyberDeck OS** | First Programmable Launcher | `closed source · coming soon` | Live `neofetch` terminal, RAM ring, `60.0 FPS` shader status, oscilloscope & agent log |
+| **MF-09** | **CyberDeck OS** | First Programmable Launcher | [Google Play](https://play.google.com/store/apps/details?id=com.metaframe.cyberdeck) (`live`) | Live `neofetch` terminal, RAM ring, `60.0 FPS` shader status, oscilloscope & agent log |
 
 ---
 
